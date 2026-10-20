@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Disallow private admin and API endpoints from indexing
+Disallow: /admin
+Disallow: /admin.php
+Disallow: /api/
+Disallow: /thank-you
+
+Sitemap: https://skycadigital.com/sitemap.xml

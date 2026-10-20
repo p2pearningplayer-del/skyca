@@ -1,0 +1,19 @@
+{
+  "name": "skyca-digital-corporate-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official corporate website, lead management system, and secure admin portal for Skyca Digital Private Limited (https://skycadigital.com)",
+  "homepage": "https://skycadigital.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/p2pearningplayer-del/skyca.git"
+  },
+  "scripts": {
+    "start": "php -S 127.0.0.1:8080 index.php",
+    "migrate": "php database/migrate.php",
+    "setup-admin": "php database/setup_admin.php",
+    "test": "php tests/run_tests.php"
+  },
+  "author": "Skyca Digital Private Limited <info@skycadigital.com>",
+  "license": "Proprietary"
+}

@@ -1,0 +1,35 @@
+# ============================================================================
+# SKYCA DIGITAL PRIVATE LIMITED — GIT IGNORE RULES
+# Never commit secrets, credentials, runtime logs, or local test databases.
+# ============================================================================
+
+# Environment & Secret Configuration Files
+.env
+.env.*
+!.env.example
+config/local.php
+config/secrets.php
+
+# Runtime Storage, Logs & Temporary Data
+storage/logs/*.log
+storage/cache/*
+storage/rate_limits/*
+storage/*.sqlite
+storage/*.db
+*.sqlite
+*.sqlite3
+*.db
+*.log
+
+# Dependency Directories
+/node_modules/
+/vendor/
+
+# OS & Editor Artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

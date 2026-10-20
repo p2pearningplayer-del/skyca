@@ -1,0 +1,89 @@
+# ============================================================================
+# SKYCA DIGITAL PRIVATE LIMITED — APACHE / LITESPEED CONFIGURATION (.htaccess)
+# Production environment: Hostinger hPanel (PHP 8.3 + LiteSpeed / hCDN)
+# ============================================================================
+
+RewriteEngine On
+Options -Indexes -MultiViews
+
+# Pass Authorization header to PHP
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# ----------------------------------------------------------------------------
+# 1. PROTECT SENSITIVE FILES & DIRECTORIES FROM DIRECT WEB ACCESS
+# ----------------------------------------------------------------------------
+<FilesMatch "^(\.env.*|\.git.*|composer\.(json|lock)|package(-lock)?\.json|.*\.(sql|sqlite|sqlite3|db|log|md|sh))$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Block direct HTTP requests to internal application directories
+RewriteRule ^(config|database|includes|pages|storage|tests)(/|$) - [F,L]
+
+# ----------------------------------------------------------------------------
+# 2. CANONICAL HTTPS & NON-WWW REDIRECTS (PRODUCTION ONLY)
+# ----------------------------------------------------------------------------
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\.skycadigital\.com$ [NC]
+RewriteRule ^ https://skycadigital.com%{REQUEST_URI} [R=301,L]
+
+# ----------------------------------------------------------------------------
+# 3. SECURITY HEADERS
+# ----------------------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header unset X-Powered-By
+</IfModule>
+
+# ----------------------------------------------------------------------------
+# 4. COMPRESSION & STATIC ASSET CACHING (CORE WEB VITALS OPTIMIZATION)
+# ----------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/json "access plus 0 seconds"
+    ExpiresByType application/xml "access plus 1 hour"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+</IfModule>
+
+# ----------------------------------------------------------------------------
+# 5. CLEAN URL ROUTING
+# ----------------------------------------------------------------------------
+# XML Sitemap route
+RewriteRule ^sitemap\.xml$ index.php?route=sitemap.xml [L,QSA]
+
+# Admin Dashboard routes
+RewriteRule ^admin/?$ admin.php [L,QSA]
+RewriteRule ^admin/(login|logout|leads|settings|password|export)/?$ admin.php?tab=$1 [L,QSA]
+
+# Backend API routes
+RewriteRule ^api/enquiry/?$ api/enquiry.php [L,QSA]
+RewriteRule ^api/admin/?$ api/admin_api.php [L,QSA]
+
+# Serve existing static files (images, css, js, favicon.ico, robots.txt) directly
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Route all other requests through Front Controller (index.php)
+RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
