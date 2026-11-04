@@ -69,6 +69,9 @@ function skyca_render_enquiry_form(array $options = []): void
             <input type="hidden" name="utm_campaign" class="attr-utm-campaign" value="<?php echo skyca_e(skyca_clean_input($_GET['utm_campaign'] ?? '', 150)); ?>">
             <input type="hidden" name="utm_content" class="attr-utm-content" value="<?php echo skyca_e(skyca_clean_input($_GET['utm_content'] ?? '', 150)); ?>">
             <input type="hidden" name="utm_term" class="attr-utm-term" value="<?php echo skyca_e(skyca_clean_input($_GET['utm_term'] ?? '', 150)); ?>">
+            <input type="hidden" name="gclid" class="attr-gclid" value="<?php echo skyca_e(skyca_clean_input($_GET['gclid'] ?? '', 255)); ?>">
+            <input type="hidden" name="fbclid" class="attr-fbclid" value="<?php echo skyca_e(skyca_clean_input($_GET['fbclid'] ?? '', 255)); ?>">
+            <input type="hidden" name="msclkid" class="attr-msclkid" value="<?php echo skyca_e(skyca_clean_input($_GET['msclkid'] ?? '', 255)); ?>">
 
             <!-- Anti-Spam Honeypot (Must remain empty) -->
             <div class="hp-field-wrap" aria-hidden="true">

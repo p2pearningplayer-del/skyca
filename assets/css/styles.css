@@ -3131,3 +3131,393 @@ ul, ol {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* ============================================================================
+   PROFESSIONAL CORPORATE 3D DESIGN SYSTEM (SPATIAL DEPTH, TILT & EXTRUSION)
+   ============================================================================ */
+
+.hero-3d-stage {
+    perspective: 1400px;
+    overflow: hidden;
+}
+
+.hero-3d-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(60px);
+    z-index: 0;
+}
+
+.hero-3d-orb-1 {
+    width: 380px;
+    height: 380px;
+    top: -90px;
+    right: 6%;
+    background: radial-gradient(circle, rgba(5, 141, 240, 0.22) 0%, rgba(3, 62, 182, 0.05) 65%, transparent 100%);
+    animation: float3DOrb 9s ease-in-out infinite alternate;
+}
+
+.hero-3d-orb-2 {
+    width: 300px;
+    height: 300px;
+    bottom: -70px;
+    left: 10%;
+    background: radial-gradient(circle, rgba(3, 62, 182, 0.16) 0%, rgba(56, 189, 248, 0.04) 70%, transparent 100%);
+    animation: float3DOrb 11s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes float3DOrb {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    100% { transform: translate3d(18px, -22px, 30px) scale(1.06); }
+}
+
+.scene-3d {
+    position: relative;
+    perspective: 1200px;
+    transform-style: preserve-3d;
+}
+
+/* 3D Interactive Surface with Specular Glare & Multi-Layered Depth Shadows */
+.card-3d-surface {
+    --rx: 0deg;
+    --ry: 0deg;
+    --glare-x: 50%;
+    --glare-y: 50%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.25s ease;
+    will-change: transform;
+}
+
+.card-3d-surface.is-tilting-3d {
+    transition: transform 0.08s linear, box-shadow 0.2s ease;
+}
+
+.card-3d-surface::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+        420px circle at var(--glare-x) var(--glare-y),
+        rgba(5, 141, 240, 0.10),
+        rgba(255, 255, 255, 0.0) 65%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 2;
+}
+
+.card-3d-surface:hover::after {
+    opacity: 1;
+}
+
+/* 3D Hero Architecture Stage Extrusion */
+.architecture-showcase-card.card-3d-surface {
+    background: linear-gradient(165deg, #ffffff 0%, #f8fbff 100%);
+    border: 1.5px solid rgba(3, 62, 182, 0.18);
+    box-shadow:
+        0 2px 0 0 #cbd5e1,
+        0 6px 0 0 #e2e8f0,
+        0 22px 44px -10px rgba(11, 21, 40, 0.16),
+        0 8px 20px -6px rgba(3, 62, 182, 0.12);
+}
+
+.architecture-showcase-card.card-3d-surface:hover {
+    border-color: rgba(5, 141, 240, 0.45);
+    box-shadow:
+        0 3px 0 0 #93c5fd,
+        0 7px 0 0 #dbeafe,
+        0 32px 60px -12px rgba(3, 62, 182, 0.22),
+        0 12px 28px -8px rgba(5, 141, 240, 0.18);
+}
+
+.layer-3d-z1 {
+    transform: translateZ(14px);
+}
+.layer-3d-z2 {
+    transform: translateZ(24px);
+}
+.layer-3d-z3 {
+    transform: translateZ(34px);
+}
+
+.arch-layer-3d {
+    background: linear-gradient(90deg, #f8fafc 0%, #ffffff 100%);
+    border: 1px solid #dbeafe;
+    box-shadow: 0 4px 12px -2px rgba(3, 62, 182, 0.07), inset 0 1px 0 #ffffff;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.arch-layer-3d:hover {
+    transform: translate3d(6px, -2px, 12px);
+    border-color: var(--brand-accent);
+    box-shadow: -4px 8px 18px -4px rgba(3, 62, 182, 0.15);
+}
+
+/* Floating 3D Satellite Chips around Hero Visual */
+.floating-3d-chip {
+    position: absolute;
+    z-index: 15;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 15px;
+    border-radius: 999px;
+    background: rgba(11, 21, 40, 0.92);
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    box-shadow: 0 14px 28px -6px rgba(11, 21, 40, 0.35), 0 0 0 4px rgba(5, 141, 240, 0.12);
+    backdrop-filter: blur(8px);
+}
+
+.chip-top-right {
+    top: -16px;
+    right: 18px;
+    animation: chipFloat3D 5s ease-in-out infinite alternate;
+}
+
+.chip-bottom-left {
+    bottom: 24px;
+    left: -18px;
+    background: linear-gradient(135deg, #033eb6 0%, #058df0 100%);
+    border-color: rgba(255, 255, 255, 0.35);
+    animation: chipFloat3D 6s ease-in-out infinite alternate-reverse;
+}
+
+.chip-3d-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 8px #38bdf8;
+}
+
+@keyframes chipFloat3D {
+    0% { transform: translate3d(0, 0, 35px); }
+    100% { transform: translate3d(0, -9px, 45px); }
+}
+
+/* 3D Extruded Buttons & Service Cards */
+.btn-3d-primary {
+    box-shadow:
+        0 4px 0 #012575,
+        0 10px 22px rgba(3, 62, 182, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-3d-primary:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 0 #012575,
+        0 14px 28px rgba(3, 62, 182, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.btn-3d-primary:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #012575, 0 5px 10px rgba(3, 62, 182, 0.25);
+}
+
+.btn-3d-secondary {
+    box-shadow:
+        0 3px 0 #cbd5e1,
+        0 8px 16px rgba(15, 23, 42, 0.06);
+}
+
+.btn-3d-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 5px 0 #93c5fd,
+        0 12px 22px rgba(3, 62, 182, 0.12);
+}
+
+.trust-card-3d {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #dbeafe;
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    box-shadow: 0 3px 0 #e2e8f0, 0 8px 18px -4px rgba(15, 23, 42, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.trust-card-3d:hover {
+    transform: translateY(-3px);
+    border-color: #93c5fd;
+    box-shadow: 0 5px 0 #bfdbfe, 0 14px 24px -6px rgba(3, 62, 182, 0.14);
+}
+
+.service-card.card-3d-surface,
+.why-feature-card.card-3d-surface,
+.process-step-card.card-3d-surface,
+.cap-group-card.card-3d-surface,
+.problem-card.card-3d-surface,
+.philosophy-card.card-3d-surface {
+    box-shadow:
+        0 3px 0 0 #e2e8f0,
+        0 10px 24px -6px rgba(15, 23, 42, 0.07);
+}
+
+.service-card.card-3d-surface:hover,
+.why-feature-card.card-3d-surface:hover,
+.process-step-card.card-3d-surface:hover,
+.cap-group-card.card-3d-surface:hover,
+.problem-card.card-3d-surface:hover,
+.philosophy-card.card-3d-surface:hover {
+    border-color: var(--brand-accent);
+    box-shadow:
+        0 5px 0 0 #93c5fd,
+        0 22px 42px -10px rgba(3, 62, 182, 0.18);
+}
+
+.service-card .service-icon-box,
+.why-feature-card .why-icon {
+    box-shadow:
+        0 3px 0 rgba(3, 62, 182, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.service-card:hover .service-icon-box,
+.why-feature-card:hover .why-icon {
+    transform: translateZ(18px) scale(1.06);
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
+    color: #ffffff;
+}
+
+.industry-card.card-3d-surface {
+    box-shadow:
+        0 4px 0 0 rgba(3, 62, 182, 0.45),
+        0 16px 32px -8px rgba(0, 0, 0, 0.35);
+}
+
+.industry-card.card-3d-surface:hover {
+    border-color: #38bdf8;
+    box-shadow:
+        0 6px 0 0 #058df0,
+        0 24px 44px -10px rgba(5, 141, 240, 0.32);
+}
+
+/* ============================================================================
+   ADS & SALES CRM DASHBOARD STYLES (PRIORITY, CHANNELS, DEAL VALUE, ACTIONS)
+   ============================================================================ */
+
+.kpi-sub {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.status-proposal-sent {
+    background: #f3e8ff;
+    color: #7e22ce;
+}
+
+.priority-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-right: 4px;
+}
+
+.priority-hot {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+.priority-warm {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fcd34d;
+}
+
+.priority-normal {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.channel-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.73rem;
+    font-weight: 700;
+    background: var(--brand-light-bg);
+    color: var(--brand-primary);
+    border: 1px solid var(--brand-light-border);
+}
+
+.deal-value-tag {
+    margin-top: 4px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #047857;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 5px;
+}
+
+.crm-quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+}
+
+.crm-mini-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--bg-slate);
+    border: 1px solid var(--border-strong);
+    color: var(--text-heading);
+}
+
+.crm-mini-btn:hover {
+    background: var(--brand-primary);
+    color: #ffffff;
+    border-color: var(--brand-primary);
+}
+
+.crm-mini-wa {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #6ee7b7;
+}
+
+.crm-mini-wa:hover {
+    background: #059669;
+    color: #ffffff;
+    border-color: #059669;
+}
+
+@media (max-width: 768px) {
+    .floating-3d-chip {
+        display: none;
+    }
+}
+

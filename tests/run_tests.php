@@ -280,6 +280,7 @@ try {
         'utm_campaign'        => 'saas_development_india',
         'utm_content'         => 'ad_variant_a',
         'utm_term'            => 'saas development company',
+        'gclid'               => 'CjwKCAjw_skyca_test_gclid_998877',
     ];
     $validRes = http_request('/api/enquiry', 'POST', $validPayload, ['Accept: application/json']);
     $validJson = json_decode($validRes['body'], true);
@@ -365,24 +366,44 @@ try {
     $leadDetailRes = http_request('/api/admin?action=get_lead&id=1');
     $leadDetailJson = json_decode($leadDetailRes['body'], true);
     assert_test(
-        'Admin API returns full enquiry details & UTM attribution',
-        $leadDetailRes['status'] === 200 && ($leadDetailJson['lead']['utm_source'] ?? '') === 'google_ads'
+        'Admin API returns full enquiry details, Google Ads channel, Hot priority & GCLID',
+        $leadDetailRes['status'] === 200 &&
+        ($leadDetailJson['lead']['utm_source'] ?? '') === 'google_ads' &&
+        ($leadDetailJson['lead']['ad_channel'] ?? '') === 'Google Ads' &&
+        ($leadDetailJson['lead']['lead_priority'] ?? '') === 'Hot' &&
+        ($leadDetailJson['lead']['gclid'] ?? '') === 'CjwKCAjw_skyca_test_gclid_998877'
     );
 
     $updateLeadRes = http_request('/api/admin', 'POST', [
-        'action'         => 'update_lead',
-        'csrf_token'     => $activeAdmCsrf,
-        'lead_id'        => '1',
-        'status'         => 'Qualified',
-        'internal_notes' => 'Verified enterprise SaaS opportunity.',
-        'new_note'       => 'Completed technical discovery call.',
+        'action'           => 'update_lead',
+        'csrf_token'       => $activeAdmCsrf,
+        'lead_id'          => '1',
+        'status'           => 'Proposal Sent',
+        'lead_priority'    => 'Hot',
+        'deal_value'       => '950000',
+        'assigned_to'      => 'Senior Solutions Architect',
+        'next_followup_at' => '2026-11-15',
+        'internal_notes'   => 'Verified enterprise SaaS opportunity.',
+        'new_note'         => 'Completed technical discovery call & sent proposal.',
     ]);
     $updateLeadJson = json_decode($updateLeadRes['body'], true);
-    $updatedStatus = (string) $pdo->query('SELECT status FROM leads WHERE id = 1')->fetchColumn();
+    $updatedLeadRow = $pdo->query('SELECT status, deal_value, assigned_to FROM leads WHERE id = 1')->fetch();
     $noteCount = (int) $pdo->query('SELECT COUNT(*) FROM lead_notes WHERE lead_id = 1')->fetchColumn();
     assert_test(
-        'Admin status workflow update (New -> Qualified) and internal note saved',
-        !empty($updateLeadJson['success']) && $updatedStatus === 'Qualified' && $noteCount === 1
+        'Admin CRM pipeline update (Proposal Sent, Deal Value ₹9,50,000, Owner & Note) saved',
+        !empty($updateLeadJson['success']) &&
+        ($updatedLeadRow['status'] ?? '') === 'Proposal Sent' &&
+        (float) ($updatedLeadRow['deal_value'] ?? 0) === 950000.0 &&
+        ($updatedLeadRow['assigned_to'] ?? '') === 'Senior Solutions Architect' &&
+        $noteCount === 1
+    );
+
+    $crmAdsTabRes = http_request('/admin?tab=crm_ads&test_mode=all');
+    assert_test(
+        'Admin Ads Campaign Analytics & CRM Integration tab renders HTTP 200',
+        $crmAdsTabRes['status'] === 200 &&
+        str_contains($crmAdsTabRes['body'], 'Ads Attribution &amp; Channel ROI Analytics') &&
+        str_contains($crmAdsTabRes['body'], 'Google Ads')
     );
 
     $csvRes = http_request('/admin?action=export_csv&test_mode=all');

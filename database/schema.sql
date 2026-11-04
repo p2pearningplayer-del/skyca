@@ -1,16 +1,15 @@
 -- ============================================================================
--- SKYCA DIGITAL PRIVATE LIMITED — MYSQL DATABASE SCHEMA
+-- SKYCA DIGITAL PRIVATE LIMITED — MYSQL DATABASE SCHEMA (WITH ADS & CRM ENGINE)
 -- Database Name: u591469534_skyca
 -- Engine: InnoDB | Charset: utf8mb4_unicode_ci
 -- SAFE MIGRATION POLICY: Uses CREATE TABLE IF NOT EXISTS exclusively.
--- Never drops, truncates, or overwrites existing tables or production data.
 -- ============================================================================
 
 SET NAMES utf8mb4;
 SET time_zone = '+05:30';
 
 -- ----------------------------------------------------------------------------
--- 1. LEADS TABLE (Primary Business Enquiries & Attribution Storage)
+-- 1. LEADS TABLE (Primary Business Enquiries, Ads Attribution & CRM Pipeline)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `leads` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -30,9 +29,18 @@ CREATE TABLE IF NOT EXISTS `leads` (
     `utm_campaign` VARCHAR(150) DEFAULT NULL,
     `utm_content` VARCHAR(150) DEFAULT NULL,
     `utm_term` VARCHAR(150) DEFAULT NULL,
+    `gclid` VARCHAR(255) DEFAULT NULL,
+    `fbclid` VARCHAR(255) DEFAULT NULL,
+    `msclkid` VARCHAR(255) DEFAULT NULL,
+    `ad_channel` VARCHAR(80) NOT NULL DEFAULT 'Direct / Organic',
+    `lead_priority` VARCHAR(20) NOT NULL DEFAULT 'Normal',
+    `deal_value` DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    `next_followup_at` DATE DEFAULT NULL,
+    `assigned_to` VARCHAR(100) DEFAULT NULL,
+    `crm_webhook_synced` TINYINT(1) NOT NULL DEFAULT 0,
     `consent_status` TINYINT(1) NOT NULL DEFAULT 1,
     `consent_timestamp` DATETIME NOT NULL,
-    `status` ENUM('New', 'Contacted', 'Qualified', 'Converted', 'Closed') NOT NULL DEFAULT 'New',
+    `status` VARCHAR(30) NOT NULL DEFAULT 'New',
     `internal_notes` TEXT DEFAULT NULL,
     `is_test` TINYINT(1) NOT NULL DEFAULT 0,
     `submission_hash` CHAR(64) DEFAULT NULL,
@@ -46,12 +54,14 @@ CREATE TABLE IF NOT EXISTS `leads` (
     KEY `idx_leads_service` (`requested_service`),
     KEY `idx_leads_created_at` (`created_at`),
     KEY `idx_leads_email` (`business_email`),
+    KEY `idx_leads_ad_channel` (`ad_channel`),
+    KEY `idx_leads_priority` (`lead_priority`),
     KEY `idx_leads_submission_hash` (`submission_hash`),
     KEY `idx_leads_is_test` (`is_test`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- 2. LEAD NOTES TABLE (Audit Trail of Admin Status Updates & Internal Notes)
+-- 2. LEAD NOTES TABLE (CRM Activity Log & Follow-up History)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lead_notes` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -65,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `lead_notes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- 3. ADMIN USERS TABLE (Authenticated Dashboard Administrators)
+-- 3. ADMIN USERS TABLE
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `admin_users` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -83,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- 4. RATE LIMITS TABLE (Brute-Force & Form Spam Throttling)
+-- 4. RATE LIMITS TABLE
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `rate_limits` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -98,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `rate_limits` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------------------------------------------------------
--- 5. SITE SETTINGS TABLE (Optional Verified Company Info & Admin Toggles)
+-- 5. SITE SETTINGS TABLE (Ads Pixels, CRM Webhooks & Verified Company Profile)
 -- ----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `site_settings` (
     `setting_key` VARCHAR(100) NOT NULL,

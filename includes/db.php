@@ -4,16 +4,13 @@ declare(strict_types=1);
 /**
  * SKYCA DIGITAL PRIVATE LIMITED — DATABASE CONNECTION & SCHEMA MANAGER
  * Uses PDO with real parameterized queries (ATTR_EMULATE_PREPARES = false).
- * Connects to MySQL (u591469534_skyca) when credentials are provided via .env or
- * Admin runtime configuration, and seamlessly falls back to a protected local PDO
- * database (storage/skyca_database.sqlite) so the live website and /admin portal
- * work out-of-the-box immediately after Git deployment.
+ * Includes non-destructive auto-migration for Ads Attribution & CRM Pipeline columns.
  */
 
 require_once dirname(__DIR__) . '/config/config.php';
 
 /**
- * Load optional runtime DB credentials configured via the Admin Panel (stored outside Git in storage/).
+ * Load optional runtime DB credentials configured via the Admin Panel.
  */
 function skyca_load_runtime_db_config(): array
 {
@@ -70,7 +67,6 @@ function skyca_db(): PDO
                     $pdo = skyca_connect_sqlite($prodSqlite);
                 }
             } else {
-                // Seamless fallback to protected local PDO database when MySQL .env credentials are not yet entered
                 $prodSqlite = SKYCA_STORAGE_DIR . DIRECTORY_SEPARATOR . 'skyca_database.sqlite';
                 $pdo = skyca_connect_sqlite($prodSqlite);
             }
@@ -117,7 +113,7 @@ function skyca_db_or_null(): ?PDO
 }
 
 /**
- * Safely ensure required tables exist in MySQL without modifying or dropping existing tables.
+ * Safely ensure required tables and CRM/Ads columns exist in MySQL without dropping data.
  */
 function skyca_ensure_schema_mysql(PDO $pdo): void
 {
@@ -137,23 +133,50 @@ function skyca_ensure_schema_mysql(PDO $pdo): void
     $stmt2 = $pdo->query("SHOW TABLES LIKE 'admin_users'");
     $adminExists = (bool) $stmt2->fetchColumn();
 
-    if ($leadsExists && $adminExists) {
-        return;
+    if (!$leadsExists || !$adminExists) {
+        $sql = (string) file_get_contents($schemaFile);
+        $statements = preg_split('/;\s*[\r\n]+/', $sql) ?: [];
+        foreach ($statements as $statement) {
+            $clean = trim($statement);
+            if ($clean === '' || str_starts_with($clean, '--')) {
+                continue;
+            }
+            $pdo->exec($clean);
+        }
     }
 
-    $sql = (string) file_get_contents($schemaFile);
-    $statements = preg_split('/;\s*[\r\n]+/', $sql) ?: [];
-    foreach ($statements as $statement) {
-        $clean = trim($statement);
-        if ($clean === '' || str_starts_with($clean, '--')) {
-            continue;
+    // Non-destructive column upgrade for existing MySQL leads table
+    $existingCols = [];
+    $colStmt = $pdo->query('SHOW COLUMNS FROM leads');
+    if ($colStmt) {
+        while ($cRow = $colStmt->fetch(PDO::FETCH_ASSOC)) {
+            $existingCols[(string) $cRow['Field']] = true;
         }
-        $pdo->exec($clean);
     }
+
+    $crmColumnsMysql = [
+        'gclid'              => "VARCHAR(255) DEFAULT NULL",
+        'fbclid'             => "VARCHAR(255) DEFAULT NULL",
+        'msclkid'            => "VARCHAR(255) DEFAULT NULL",
+        'ad_channel'         => "VARCHAR(80) NOT NULL DEFAULT 'Direct / Organic'",
+        'lead_priority'      => "VARCHAR(20) NOT NULL DEFAULT 'Normal'",
+        'deal_value'         => "DECIMAL(12,2) NOT NULL DEFAULT 0.00",
+        'next_followup_at'   => "DATE DEFAULT NULL",
+        'assigned_to'        => "VARCHAR(100) DEFAULT NULL",
+        'crm_webhook_synced' => "TINYINT(1) NOT NULL DEFAULT 0",
+    ];
+
+    foreach ($crmColumnsMysql as $colName => $colDef) {
+        if (!isset($existingCols[$colName])) {
+            @$pdo->exec("ALTER TABLE `leads` ADD COLUMN `{$colName}` {$colDef}");
+        }
+    }
+    // Widen status column if previously ENUM so 'Proposal Sent' works seamlessly
+    @$pdo->exec("ALTER TABLE `leads` MODIFY COLUMN `status` VARCHAR(30) NOT NULL DEFAULT 'New'");
 }
 
 /**
- * Ensure schema compatibility for PDO SQLite storage.
+ * Ensure schema and CRM/Ads columns compatibility for PDO SQLite storage.
  */
 function skyca_ensure_schema_sqlite(PDO $pdo): void
 {
@@ -182,6 +205,15 @@ function skyca_ensure_schema_sqlite(PDO $pdo): void
             utm_campaign TEXT DEFAULT NULL,
             utm_content TEXT DEFAULT NULL,
             utm_term TEXT DEFAULT NULL,
+            gclid TEXT DEFAULT NULL,
+            fbclid TEXT DEFAULT NULL,
+            msclkid TEXT DEFAULT NULL,
+            ad_channel TEXT NOT NULL DEFAULT 'Direct / Organic',
+            lead_priority TEXT NOT NULL DEFAULT 'Normal',
+            deal_value REAL NOT NULL DEFAULT 0.00,
+            next_followup_at TEXT DEFAULT NULL,
+            assigned_to TEXT DEFAULT NULL,
+            crm_webhook_synced INTEGER NOT NULL DEFAULT 0,
             consent_status INTEGER NOT NULL DEFAULT 1,
             consent_timestamp TEXT NOT NULL,
             status TEXT NOT NULL DEFAULT 'New',
@@ -235,13 +267,37 @@ function skyca_ensure_schema_sqlite(PDO $pdo): void
             updated_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
         );
     ");
+
+    // Non-destructive column upgrade for existing SQLite database
+    $existingCols = [];
+    $pragma = $pdo->query("PRAGMA table_info(leads)");
+    if ($pragma) {
+        while ($row = $pragma->fetch(PDO::FETCH_ASSOC)) {
+            $existingCols[(string) $row['name']] = true;
+        }
+    }
+
+    $crmColumnsSqlite = [
+        'gclid'              => "TEXT DEFAULT NULL",
+        'fbclid'             => "TEXT DEFAULT NULL",
+        'msclkid'            => "TEXT DEFAULT NULL",
+        'ad_channel'         => "TEXT NOT NULL DEFAULT 'Direct / Organic'",
+        'lead_priority'      => "TEXT NOT NULL DEFAULT 'Normal'",
+        'deal_value'         => "REAL NOT NULL DEFAULT 0.00",
+        'next_followup_at'   => "TEXT DEFAULT NULL",
+        'assigned_to'        => "TEXT DEFAULT NULL",
+        'crm_webhook_synced' => "INTEGER NOT NULL DEFAULT 0",
+    ];
+
+    foreach ($crmColumnsSqlite as $colName => $colDef) {
+        if (!isset($existingCols[$colName])) {
+            @$pdo->exec("ALTER TABLE leads ADD COLUMN {$colName} {$colDef}");
+        }
+    }
 }
 
 /**
  * Bootstrap the initial admin account if admin_users is empty.
- * Uses ADMIN_INITIAL_PASSWORD from .env if set, or initializes the default
- * bcrypt hash so the administrator can log in immediately after Git deployment
- * and rotate their password inside /admin?tab=password.
  */
 function skyca_bootstrap_initial_admin(PDO $pdo): void
 {
@@ -257,9 +313,6 @@ function skyca_bootstrap_initial_admin(PDO $pdo): void
     if ($initPassword !== '' && strlen($initPassword) >= 8) {
         $hash = password_hash($initPassword, PASSWORD_DEFAULT);
     } else {
-        // Pre-computed bcrypt hash for initial bootstrap (changeable anytime in /admin?tab=password)
-        $hash = '$2y$10$9t5r7P8wV2kX1mQ4zL6nOeH3jC5vB8yN0pM2qR4sT6uV8wX0yZ2a.';
-        // Generate valid standard PHP bcrypt hash for initial setup
         $hash = password_hash('Skyca@2026#Admin', PASSWORD_DEFAULT);
     }
 

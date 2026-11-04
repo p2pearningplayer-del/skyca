@@ -188,6 +188,9 @@ function skyca_get_settings(): array
         'google_ads_conversion_id'  => skyca_env('GOOGLE_ADS_CONVERSION_ID', ''),
         'google_ads_conversion_label' => skyca_env('GOOGLE_ADS_CONVERSION_LABEL', ''),
         'meta_pixel_id'             => skyca_env('META_PIXEL_ID', ''),
+        'meta_capi_token'           => skyca_env('META_CAPI_TOKEN', ''),
+        'crm_webhook_url'           => skyca_env('CRM_WEBHOOK_URL', ''),
+        'crm_webhook_secret'        => skyca_env('CRM_WEBHOOK_SECRET', ''),
         'google_site_verification'  => skyca_env('GOOGLE_SITE_VERIFICATION', ''),
         'email_notifications_enabled' => skyca_env_bool('SMTP_ENABLED', false) ? '1' : '0',
     ];

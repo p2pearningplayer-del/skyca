@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 /**
- * SKYCA DIGITAL PRIVATE LIMITED — SECURE ADMIN DASHBOARD (admin.php)
- * Server-authenticated lead management, status workflow, CSV export,
- * password management, and optional verified company profile configuration.
+ * SKYCA DIGITAL PRIVATE LIMITED — SECURE ADMIN & ADS CRM PORTAL (admin.php)
+ * Server-authenticated lead CRM pipeline, Google/Meta Ads attribution analytics,
+ * external CRM webhook configuration, CSV export, and company settings.
  */
 
 require_once __DIR__ . '/config/config.php';
@@ -20,9 +20,7 @@ header('X-Robots-Tag: noindex, nofollow');
 $tab    = (string) ($_GET['tab'] ?? 'leads');
 $action = (string) ($_GET['action'] ?? $_POST['action'] ?? '');
 
-// ----------------------------------------------------------------------------
 // 1. HANDLE LOGOUT
-// ----------------------------------------------------------------------------
 if ($tab === 'logout' || $action === 'logout') {
     $_SESSION = [];
     if (ini_get('session.use_cookies')) {
@@ -42,9 +40,7 @@ if ($tab === 'logout' || $action === 'logout') {
     exit;
 }
 
-// ----------------------------------------------------------------------------
 // 2. HANDLE LOGIN SUBMISSION (POST)
-// ----------------------------------------------------------------------------
 $loginError = '';
 $dbReady    = true;
 $adminCount = 0;
@@ -66,7 +62,7 @@ if (!skyca_is_admin_logged_in() && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'PO
         if (!$rate['allowed']) {
             $loginError = 'Too many failed login attempts. Please wait 15 minutes before trying again.';
         } elseif (!$dbReady) {
-            $loginError = 'Database connection is not yet configured on this server. Check your .env file.';
+            $loginError = 'Database service is unavailable.';
         } else {
             $loginInput = trim((string) ($_POST['login_id'] ?? ''));
             $password   = (string) ($_POST['password'] ?? '');
@@ -105,9 +101,7 @@ if (!skyca_is_admin_logged_in() && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'PO
     }
 }
 
-// ----------------------------------------------------------------------------
 // 3. RENDER LOGIN SCREEN IF NOT AUTHENTICATED
-// ----------------------------------------------------------------------------
 if (!skyca_is_admin_logged_in()) {
     $csrfToken = skyca_csrf_token();
     ?>
@@ -117,18 +111,18 @@ if (!skyca_is_admin_logged_in()) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="robots" content="noindex, nofollow">
-        <title>Admin Login | <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></title>
+        <title>Admin &amp; Ads CRM Login | <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
         <link rel="stylesheet" href="<?php echo skyca_e(skyca_asset('assets/css/styles.css')); ?>">
     </head>
     <body class="admin-login-body">
         <main class="admin-login-wrapper">
-            <div class="admin-login-card">
+            <div class="admin-login-card card-3d-surface">
                 <div class="admin-login-brand">
                     <a href="/">
                         <img src="/assets/images/skyca-logo-horizontal.png" alt="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?>" width="240" height="65">
                     </a>
-                    <h1>Lead Management Portal</h1>
+                    <h1>Ads &amp; Lead CRM Portal</h1>
                     <p>Authorized Administrator Access Only</p>
                 </div>
 
@@ -138,18 +132,6 @@ if (!skyca_is_admin_logged_in()) {
 
                 <?php if ($loginError !== ''): ?>
                     <div class="form-alert alert-error" role="alert"><?php echo skyca_e($loginError); ?></div>
-                <?php endif; ?>
-
-                <?php if (!$dbReady): ?>
-                    <div class="form-alert alert-warning">
-                        <strong>Database Configuration Required:</strong>
-                        <span>Please configure <code>DATABASE_USER</code> and <code>DATABASE_PASSWORD</code> for <code>u591469534_skyca</code> in your server <code>.env</code> file.</span>
-                    </div>
-                <?php elseif ($adminCount === 0): ?>
-                    <div class="form-alert alert-warning">
-                        <strong>Initial Admin Setup Required:</strong>
-                        <span>No admin user exists yet. Set <code>ADMIN_INITIAL_PASSWORD</code> in <code>.env</code> or run <code>php database/setup_admin.php</code> on the server.</span>
-                    </div>
                 <?php endif; ?>
 
                 <form method="POST" action="/admin" class="admin-login-form" novalidate>
@@ -183,7 +165,7 @@ if (!skyca_is_admin_logged_in()) {
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-block btn-lg mt-4">
-                        Sign In to Dashboard
+                        Sign In to CRM Dashboard
                     </button>
                 </form>
 
@@ -198,22 +180,22 @@ if (!skyca_is_admin_logged_in()) {
     exit;
 }
 
-// ----------------------------------------------------------------------------
-// 4. AUTHENTICATED ADMIN DASHBOARD LOGIC & QUERY FILTERS
-// ----------------------------------------------------------------------------
+// 4. AUTHENTICATED ADMIN & CRM LOGIC
 $currentAdmin   = skyca_current_admin();
 $csrfToken      = skyca_csrf_token();
 $serviceOptions = skyca_get_service_options();
 $settings       = skyca_get_settings();
 
-$searchQuery   = skyca_clean_input((string) ($_GET['q'] ?? ''), 120, false);
-$filterStatus  = skyca_clean_input((string) ($_GET['status'] ?? ''), 30, false);
-$filterService = skyca_clean_input((string) ($_GET['service'] ?? ''), 150, false);
-$dateFrom      = skyca_clean_input((string) ($_GET['date_from'] ?? ''), 20, false);
-$dateTo        = skyca_clean_input((string) ($_GET['date_to'] ?? ''), 20, false);
-$testMode      = skyca_clean_input((string) ($_GET['test_mode'] ?? 'live'), 15, false); // 'live', 'all', 'test'
-$page          = max(1, (int) ($_GET['page'] ?? 1));
-$perPage       = 20;
+$searchQuery    = skyca_clean_input((string) ($_GET['q'] ?? ''), 120, false);
+$filterStatus   = skyca_clean_input((string) ($_GET['status'] ?? ''), 30, false);
+$filterService  = skyca_clean_input((string) ($_GET['service'] ?? ''), 150, false);
+$filterChannel  = skyca_clean_input((string) ($_GET['ad_channel'] ?? ''), 80, false);
+$filterPriority = skyca_clean_input((string) ($_GET['priority'] ?? ''), 20, false);
+$dateFrom       = skyca_clean_input((string) ($_GET['date_from'] ?? ''), 20, false);
+$dateTo         = skyca_clean_input((string) ($_GET['date_to'] ?? ''), 20, false);
+$testMode       = skyca_clean_input((string) ($_GET['test_mode'] ?? 'live'), 15, false);
+$page           = max(1, (int) ($_GET['page'] ?? 1));
+$perPage        = 20;
 
 $whereClauses = ['1=1'];
 $params       = [];
@@ -224,10 +206,22 @@ if ($testMode === 'live') {
     $whereClauses[] = 'is_test = 1';
 }
 
-$validStatuses = ['New', 'Contacted', 'Qualified', 'Converted', 'Closed'];
+$validStatuses   = ['New', 'Contacted', 'Qualified', 'Proposal Sent', 'Converted', 'Closed'];
+$validPriorities = ['Hot', 'Warm', 'Normal'];
+
 if ($filterStatus !== '' && in_array($filterStatus, $validStatuses, true)) {
     $whereClauses[]    = 'status = :status';
     $params[':status'] = $filterStatus;
+}
+
+if ($filterPriority !== '' && in_array($filterPriority, $validPriorities, true)) {
+    $whereClauses[]      = 'lead_priority = :priority';
+    $params[':priority'] = $filterPriority;
+}
+
+if ($filterChannel !== '') {
+    $whereClauses[]        = 'ad_channel = :ad_channel';
+    $params[':ad_channel'] = $filterChannel;
 }
 
 if ($filterService !== '') {
@@ -246,28 +240,28 @@ if ($dateTo !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $dateTo)) {
 }
 
 if ($searchQuery !== '') {
-    $whereClauses[] = '(lead_reference LIKE :q1 OR full_name LIKE :q2 OR business_email LIKE :q3 OR phone LIKE :q4 OR company_name LIKE :q5)';
+    $whereClauses[] = '(lead_reference LIKE :q1 OR full_name LIKE :q2 OR business_email LIKE :q3 OR phone LIKE :q4 OR company_name LIKE :q5 OR utm_campaign LIKE :q6)';
     $likeVal = '%' . $searchQuery . '%';
     $params[':q1'] = $likeVal;
     $params[':q2'] = $likeVal;
     $params[':q3'] = $likeVal;
     $params[':q4'] = $likeVal;
     $params[':q5'] = $likeVal;
+    $params[':q6'] = $likeVal;
 }
 
 $whereSql = implode(' AND ', $whereClauses);
 
-// ----------------------------------------------------------------------------
 // 5. HANDLE AUTHORIZED CSV EXPORT
-// ----------------------------------------------------------------------------
 if ($action === 'export_csv') {
     $exportStmt = $pdo->prepare("
         SELECT
-            lead_reference, status, full_name, business_email, phone,
-            company_name, requested_service, estimated_budget, project_timeline,
+            lead_reference, status, lead_priority, deal_value, ad_channel,
+            full_name, business_email, phone, company_name, requested_service,
+            estimated_budget, project_timeline, next_followup_at, assigned_to,
             project_description, landing_page, referrer, utm_source, utm_medium,
-            utm_campaign, utm_content, utm_term, consent_timestamp, is_test,
-            internal_notes, created_at, updated_at
+            utm_campaign, utm_content, utm_term, gclid, fbclid, consent_timestamp,
+            is_test, internal_notes, created_at, updated_at
         FROM leads
         WHERE {$whereSql}
         ORDER BY id DESC
@@ -275,26 +269,29 @@ if ($action === 'export_csv') {
     ");
     $exportStmt->execute($params);
 
-    $filename = 'skyca_leads_export_' . date('Ymd_His') . '.csv';
+    $filename = 'skyca_crm_leads_export_' . date('Ymd_His') . '.csv';
     header('Content-Type: text/csv; charset=UTF-8');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
 
     $out = fopen('php://output', 'w');
-    // Write UTF-8 BOM for Excel compatibility
     fwrite($out, "\xEF\xBB\xBF");
 
     fputcsv($out, [
-        'Lead Reference', 'Status', 'Full Name', 'Business Email', 'Phone',
-        'Company Name', 'Requested Service', 'Estimated Budget', 'Project Timeline',
+        'Lead Reference', 'CRM Status', 'Priority', 'Deal Value (INR)', 'Ad Channel',
+        'Full Name', 'Business Email', 'Phone', 'Company Name', 'Requested Service',
+        'Estimated Budget', 'Project Timeline', 'Next Follow-up Date', 'Assigned To',
         'Project Description', 'Landing Page', 'Referrer', 'UTM Source', 'UTM Medium',
-        'UTM Campaign', 'UTM Content', 'UTM Term', 'Consent Timestamp', 'Is Test Lead',
-        'Internal Notes', 'Created At', 'Updated At'
+        'UTM Campaign', 'UTM Content', 'UTM Term', 'GCLID', 'FBCLID', 'Consent Timestamp',
+        'Is Test Lead', 'Internal Notes', 'Created At', 'Updated At'
     ]);
 
     while ($row = $exportStmt->fetch(PDO::FETCH_ASSOC)) {
         fputcsv($out, [
             skyca_csv_safe($row['lead_reference']),
             skyca_csv_safe($row['status']),
+            skyca_csv_safe($row['lead_priority']),
+            skyca_csv_safe((string) ($row['deal_value'] ?? '0')),
+            skyca_csv_safe($row['ad_channel']),
             skyca_csv_safe($row['full_name']),
             skyca_csv_safe($row['business_email']),
             skyca_csv_safe($row['phone']),
@@ -302,6 +299,8 @@ if ($action === 'export_csv') {
             skyca_csv_safe($row['requested_service']),
             skyca_csv_safe($row['estimated_budget']),
             skyca_csv_safe($row['project_timeline']),
+            skyca_csv_safe($row['next_followup_at']),
+            skyca_csv_safe($row['assigned_to']),
             skyca_csv_safe($row['project_description']),
             skyca_csv_safe($row['landing_page']),
             skyca_csv_safe($row['referrer']),
@@ -310,6 +309,8 @@ if ($action === 'export_csv') {
             skyca_csv_safe($row['utm_campaign']),
             skyca_csv_safe($row['utm_content']),
             skyca_csv_safe($row['utm_term']),
+            skyca_csv_safe($row['gclid']),
+            skyca_csv_safe($row['fbclid']),
             skyca_csv_safe($row['consent_timestamp']),
             ((int) $row['is_test'] === 1) ? 'TEST' : 'LIVE',
             skyca_csv_safe($row['internal_notes']),
@@ -321,18 +322,20 @@ if ($action === 'export_csv') {
     exit;
 }
 
-// ----------------------------------------------------------------------------
 // 6. FETCH DASHBOARD KPI STATS & PAGINATED LEADS
-// ----------------------------------------------------------------------------
 $kpiCondition = ($testMode === 'live') ? 'WHERE is_test = 0' : (($testMode === 'test') ? 'WHERE is_test = 1' : '');
 $statsStmt = $pdo->query("
     SELECT
         COUNT(*) AS total_count,
         SUM(CASE WHEN status = 'New' THEN 1 ELSE 0 END) AS new_count,
         SUM(CASE WHEN status = 'Contacted' THEN 1 ELSE 0 END) AS contacted_count,
-        SUM(CASE WHEN status = 'Qualified' THEN 1 ELSE 0 END) AS qualified_count,
+        SUM(CASE WHEN status IN ('Qualified', 'Proposal Sent') THEN 1 ELSE 0 END) AS qualified_count,
         SUM(CASE WHEN status = 'Converted' THEN 1 ELSE 0 END) AS converted_count,
-        SUM(CASE WHEN status = 'Closed' THEN 1 ELSE 0 END) AS closed_count
+        SUM(CASE WHEN status = 'Closed' THEN 1 ELSE 0 END) AS closed_count,
+        SUM(CASE WHEN lead_priority = 'Hot' THEN 1 ELSE 0 END) AS hot_count,
+        SUM(CASE WHEN ad_channel IN ('Google Ads', 'Meta Ads', 'Microsoft Ads', 'LinkedIn Ads') THEN 1 ELSE 0 END) AS paid_ads_count,
+        SUM(CASE WHEN status != 'Closed' THEN COALESCE(deal_value, 0) ELSE 0 END) AS pipeline_value,
+        SUM(CASE WHEN status = 'Converted' THEN COALESCE(deal_value, 0) ELSE 0 END) AS won_value
     FROM leads
     {$kpiCondition}
 ");
@@ -349,7 +352,8 @@ $leadsStmt = $pdo->prepare("
     SELECT
         id, lead_reference, full_name, business_email, phone, company_name,
         requested_service, estimated_budget, project_timeline, utm_source,
-        utm_campaign, status, is_test, created_at
+        utm_campaign, ad_channel, lead_priority, deal_value, next_followup_at,
+        assigned_to, status, is_test, created_at
     FROM leads
     WHERE {$whereSql}
     ORDER BY id DESC
@@ -364,7 +368,7 @@ $leadsList = $leadsStmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Lead Management Dashboard | <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></title>
+    <title>Ads &amp; Sales CRM Dashboard | <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="<?php echo skyca_e(skyca_asset('assets/css/styles.css')); ?>">
 </head>
@@ -376,12 +380,13 @@ $leadsList = $leadsStmt->fetchAll();
                 <a href="/admin" class="admin-logo-link">
                     <img src="/assets/images/skyca-logo-horizontal.png" alt="Skyca Digital" width="190" height="51">
                 </a>
-                <span class="admin-portal-badge">Lead &amp; Operations Portal</span>
+                <span class="admin-portal-badge">Ads &amp; Lead CRM</span>
             </div>
 
             <nav class="admin-nav" aria-label="Admin Navigation">
-                <a href="/admin?tab=leads" class="admin-nav-link <?php echo $tab === 'leads' ? 'active' : ''; ?>">Enquiries &amp; Leads</a>
-                <a href="/admin?tab=settings" class="admin-nav-link <?php echo $tab === 'settings' ? 'active' : ''; ?>">Company &amp; Notification Settings</a>
+                <a href="/admin?tab=leads" class="admin-nav-link <?php echo $tab === 'leads' ? 'active' : ''; ?>">CRM Pipeline &amp; Leads</a>
+                <a href="/admin?tab=crm_ads" class="admin-nav-link <?php echo $tab === 'crm_ads' ? 'active' : ''; ?>">Ads &amp; CRM Hub</a>
+                <a href="/admin?tab=settings" class="admin-nav-link <?php echo $tab === 'settings' ? 'active' : ''; ?>">Company &amp; DB Settings</a>
                 <a href="/admin?tab=password" class="admin-nav-link <?php echo $tab === 'password' ? 'active' : ''; ?>">Change Password</a>
             </nav>
 
@@ -395,49 +400,73 @@ $leadsList = $leadsStmt->fetchAll();
 
     <main class="container admin-main">
         <?php if ($tab === 'leads'): ?>
-            <!-- KPI SUMMARY CARDS -->
-            <section class="admin-kpi-grid" aria-label="Lead Summary Metrics">
+            <!-- EXECUTIVE CRM & ADS KPI CARDS -->
+            <section class="admin-kpi-grid" aria-label="CRM and Ads Summary Metrics">
                 <div class="kpi-card">
                     <span class="kpi-label">Total Enquiries</span>
                     <strong class="kpi-value"><?php echo (int) ($kpis['total_count'] ?? 0); ?></strong>
+                    <span class="kpi-sub">New: <?php echo (int) ($kpis['new_count'] ?? 0); ?></span>
                 </div>
-                <div class="kpi-card kpi-new">
-                    <span class="kpi-label">New</span>
-                    <strong class="kpi-value"><?php echo (int) ($kpis['new_count'] ?? 0); ?></strong>
+                <div class="kpi-card kpi-hot">
+                    <span class="kpi-label">Hot Priority Leads</span>
+                    <strong class="kpi-value"><?php echo (int) ($kpis['hot_count'] ?? 0); ?></strong>
+                    <span class="kpi-sub">High-Intent / Urgent</span>
                 </div>
-                <div class="kpi-card kpi-contacted">
-                    <span class="kpi-label">Contacted</span>
-                    <strong class="kpi-value"><?php echo (int) ($kpis['contacted_count'] ?? 0); ?></strong>
+                <div class="kpi-card kpi-ads">
+                    <span class="kpi-label">Paid Ads Leads</span>
+                    <strong class="kpi-value"><?php echo (int) ($kpis['paid_ads_count'] ?? 0); ?></strong>
+                    <span class="kpi-sub">Google &amp; Meta Ads</span>
                 </div>
                 <div class="kpi-card kpi-qualified">
-                    <span class="kpi-label">Qualified</span>
+                    <span class="kpi-label">Qualified / Proposal</span>
                     <strong class="kpi-value"><?php echo (int) ($kpis['qualified_count'] ?? 0); ?></strong>
+                    <span class="kpi-sub">Contacted: <?php echo (int) ($kpis['contacted_count'] ?? 0); ?></span>
+                </div>
+                <div class="kpi-card kpi-pipeline">
+                    <span class="kpi-label">Active Pipeline</span>
+                    <strong class="kpi-value">₹<?php echo number_format((float) ($kpis['pipeline_value'] ?? 0)); ?></strong>
+                    <span class="kpi-sub">Open Deal Value</span>
                 </div>
                 <div class="kpi-card kpi-converted">
-                    <span class="kpi-label">Converted</span>
+                    <span class="kpi-label">Converted (Won)</span>
                     <strong class="kpi-value"><?php echo (int) ($kpis['converted_count'] ?? 0); ?></strong>
-                </div>
-                <div class="kpi-card kpi-closed">
-                    <span class="kpi-label">Closed</span>
-                    <strong class="kpi-value"><?php echo (int) ($kpis['closed_count'] ?? 0); ?></strong>
+                    <span class="kpi-sub">Won: ₹<?php echo number_format((float) ($kpis['won_value'] ?? 0)); ?></span>
                 </div>
             </section>
 
-            <!-- SEARCH, FILTER & EXPORT BAR -->
+            <!-- CRM SEARCH, ADS CHANNEL FILTER & EXPORT BAR -->
             <section class="admin-filter-card">
                 <form method="GET" action="/admin" class="admin-filter-form">
                     <input type="hidden" name="tab" value="leads">
                     <div class="admin-filter-grid">
                         <div>
-                            <label for="f-q" class="form-label">Search Keyword</label>
-                            <input type="text" id="f-q" name="q" value="<?php echo skyca_e($searchQuery); ?>" class="form-control" placeholder="Name, email, phone, company, ref...">
+                            <label for="f-q" class="form-label">Search CRM</label>
+                            <input type="text" id="f-q" name="q" value="<?php echo skyca_e($searchQuery); ?>" class="form-control" placeholder="Name, email, phone, campaign, ref...">
                         </div>
                         <div>
-                            <label for="f-status" class="form-label">Lead Status</label>
+                            <label for="f-status" class="form-label">Pipeline Stage</label>
                             <select id="f-status" name="status" class="form-control">
-                                <option value="">All Statuses</option>
+                                <option value="">All Stages</option>
                                 <?php foreach ($validStatuses as $st): ?>
                                     <option value="<?php echo skyca_e($st); ?>" <?php echo $filterStatus === $st ? 'selected' : ''; ?>><?php echo skyca_e($st); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="f-channel" class="form-label">Ad Channel</label>
+                            <select id="f-channel" name="ad_channel" class="form-control">
+                                <option value="">All Channels</option>
+                                <?php foreach (['Google Ads', 'Meta Ads', 'Microsoft Ads', 'LinkedIn Ads', 'Organic Search', 'Direct / Organic', 'Referral'] as $chOpt): ?>
+                                    <option value="<?php echo skyca_e($chOpt); ?>" <?php echo $filterChannel === $chOpt ? 'selected' : ''; ?>><?php echo skyca_e($chOpt); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="f-priority" class="form-label">Lead Priority</label>
+                            <select id="f-priority" name="priority" class="form-control">
+                                <option value="">All Priorities</option>
+                                <?php foreach ($validPriorities as $prOpt): ?>
+                                    <option value="<?php echo skyca_e($prOpt); ?>" <?php echo $filterPriority === $prOpt ? 'selected' : ''; ?>><?php echo skyca_e($prOpt); ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -451,14 +480,6 @@ $leadsList = $leadsStmt->fetchAll();
                             </select>
                         </div>
                         <div>
-                            <label for="f-date-from" class="form-label">From Date</label>
-                            <input type="date" id="f-date-from" name="date_from" value="<?php echo skyca_e($dateFrom); ?>" class="form-control">
-                        </div>
-                        <div>
-                            <label for="f-date-to" class="form-label">To Date</label>
-                            <input type="date" id="f-date-to" name="date_to" value="<?php echo skyca_e($dateTo); ?>" class="form-control">
-                        </div>
-                        <div>
                             <label for="f-test" class="form-label">Lead Type</label>
                             <select id="f-test" name="test_mode" class="form-control">
                                 <option value="live" <?php echo $testMode === 'live' ? 'selected' : ''; ?>>Genuine Leads Only</option>
@@ -470,56 +491,67 @@ $leadsList = $leadsStmt->fetchAll();
 
                     <div class="admin-filter-actions">
                         <div class="filter-btn-group">
-                            <button type="submit" class="btn btn-primary btn-sm">Apply Filters</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Filter CRM</button>
                             <a href="/admin?tab=leads" class="btn btn-outline btn-sm">Reset</a>
                         </div>
                         <?php
                         $exportQuery = http_build_query([
-                            'action'    => 'export_csv',
-                            'q'         => $searchQuery,
-                            'status'    => $filterStatus,
-                            'service'   => $filterService,
-                            'date_from' => $dateFrom,
-                            'date_to'   => $dateTo,
-                            'test_mode' => $testMode,
+                            'action'     => 'export_csv',
+                            'q'          => $searchQuery,
+                            'status'     => $filterStatus,
+                            'ad_channel' => $filterChannel,
+                            'priority'   => $filterPriority,
+                            'service'    => $filterService,
+                            'date_from'  => $dateFrom,
+                            'date_to'    => $dateTo,
+                            'test_mode'  => $testMode,
                         ]);
                         ?>
                         <a href="/admin?<?php echo skyca_e($exportQuery); ?>" class="btn btn-secondary btn-sm">
-                            Export Filtered Leads to CSV (<?php echo $totalFiltered; ?>)
+                            Export CRM Leads to CSV (<?php echo $totalFiltered; ?>)
                         </a>
                     </div>
                 </form>
             </section>
 
-            <!-- LEADS DATA TABLE -->
+            <!-- CRM LEADS DATA TABLE -->
             <section class="admin-table-card">
                 <div class="admin-table-responsive">
                     <table class="admin-leads-table">
                         <thead>
                             <tr>
-                                <th>Ref ID &amp; Date</th>
-                                <th>Client Details</th>
-                                <th>Service &amp; Scope</th>
-                                <th>Attribution</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Ref ID &amp; Priority</th>
+                                <th>Client &amp; Quick Contact</th>
+                                <th>Service &amp; Deal Value</th>
+                                <th>Ads Channel &amp; Campaign</th>
+                                <th>Stage &amp; Follow-up</th>
+                                <th>CRM Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php if (empty($leadsList)): ?>
                                 <tr>
                                     <td colspan="6" class="empty-table-cell">
-                                        No project enquiries match the current filter criteria.
+                                        No CRM enquiries match the current filter criteria.
                                     </td>
                                 </tr>
                             <?php else: ?>
                                 <?php foreach ($leadsList as $row): ?>
+                                    <?php
+                                    $waPhone = preg_replace('/\D+/', '', (string) $row['phone']);
+                                    $waText  = rawurlencode("Hello " . $row['full_name'] . ", this is Skyca Digital Private Limited regarding your enquiry (" . $row['lead_reference'] . ") for " . $row['requested_service'] . ".");
+                                    ?>
                                     <tr>
                                         <td>
                                             <strong class="lead-ref-mono"><?php echo skyca_e($row['lead_reference']); ?></strong>
                                             <?php if ((int) $row['is_test'] === 1): ?>
                                                 <span class="badge-test">TEST</span>
                                             <?php endif; ?>
+                                            <div class="mt-1">
+                                                <span class="priority-badge priority-<?php echo strtolower(skyca_e($row['lead_priority'] ?? 'normal')); ?>">
+                                                    <?php echo skyca_e($row['lead_priority'] ?? 'Normal'); ?>
+                                                </span>
+                                            </div>
                                             <div class="table-subtext"><?php echo skyca_e($row['created_at']); ?></div>
                                         </td>
                                         <td>
@@ -528,38 +560,53 @@ $leadsList = $leadsStmt->fetchAll();
                                                 <div class="table-subtext"><?php echo skyca_e($row['company_name']); ?></div>
                                             <?php endif; ?>
                                             <div class="table-subtext">
-                                                <a href="mailto:<?php echo skyca_e($row['business_email']); ?>"><?php echo skyca_e($row['business_email']); ?></a>
-                                                &bull;
-                                                <a href="tel:<?php echo skyca_e($row['phone']); ?>"><?php echo skyca_e($row['phone']); ?></a>
+                                                <?php echo skyca_e($row['business_email']); ?> &bull; <?php echo skyca_e($row['phone']); ?>
+                                            </div>
+                                            <div class="crm-quick-actions">
+                                                <?php if ($waPhone !== ''): ?>
+                                                    <a href="https://wa.me/<?php echo skyca_e($waPhone); ?>?text=<?php echo $waText; ?>" target="_blank" rel="noopener" class="crm-mini-btn crm-wa-btn" title="WhatsApp Follow-up">WhatsApp</a>
+                                                <?php endif; ?>
+                                                <a href="tel:<?php echo skyca_e($row['phone']); ?>" class="crm-mini-btn" title="Call Client">Call</a>
+                                                <a href="mailto:<?php echo skyca_e($row['business_email']); ?>?subject=<?php echo rawurlencode('Regarding Your Enquiry ' . $row['lead_reference'] . ' — Skyca Digital'); ?>" class="crm-mini-btn" title="Email Client">Email</a>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="service-cell-title"><?php echo skyca_e($row['requested_service']); ?></div>
+                                            <div class="deal-value-tag">
+                                                Deal Value: <strong>₹<?php echo number_format((float) ($row['deal_value'] ?? 0)); ?></strong>
+                                            </div>
                                             <div class="table-subtext">
                                                 Budget: <?php echo skyca_e($row['estimated_budget'] ?: 'N/A'); ?> |
                                                 Timeline: <?php echo skyca_e($row['project_timeline'] ?: 'N/A'); ?>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="table-subtext">
-                                                <?php echo skyca_e($row['utm_source'] ?: 'Direct / Organic'); ?>
+                                            <span class="channel-badge"><?php echo skyca_e($row['ad_channel'] ?: 'Direct / Organic'); ?></span>
+                                            <div class="table-subtext">
+                                                Source: <?php echo skyca_e($row['utm_source'] ?: 'Direct'); ?>
                                                 <?php if (!empty($row['utm_campaign'])): ?>
-                                                    (<?php echo skyca_e($row['utm_campaign']); ?>)
+                                                    <br>Campaign: <strong><?php echo skyca_e($row['utm_campaign']); ?></strong>
                                                 <?php endif; ?>
-                                            </span>
+                                            </div>
                                         </td>
                                         <td>
-                                            <span class="status-pill status-<?php echo strtolower(skyca_e($row['status'])); ?>">
+                                            <span class="status-pill status-<?php echo strtolower((string) preg_replace('/\s+/', '-', skyca_e($row['status']))); ?>">
                                                 <?php echo skyca_e($row['status']); ?>
                                             </span>
+                                            <?php if (!empty($row['next_followup_at'])): ?>
+                                                <div class="table-subtext">Follow-up: <strong><?php echo skyca_e($row['next_followup_at']); ?></strong></div>
+                                            <?php endif; ?>
+                                            <?php if (!empty($row['assigned_to'])): ?>
+                                                <div class="table-subtext">Owner: <?php echo skyca_e($row['assigned_to']); ?></div>
+                                            <?php endif; ?>
                                         </td>
                                         <td>
                                             <button
                                                 type="button"
-                                                class="btn btn-outline btn-sm js-open-lead-modal"
+                                                class="btn btn-primary btn-sm js-open-lead-modal"
                                                 data-lead-id="<?php echo (int) $row['id']; ?>"
                                             >
-                                                View / Manage
+                                                Manage CRM
                                             </button>
                                         </td>
                                     </tr>
@@ -569,7 +616,6 @@ $leadsList = $leadsStmt->fetchAll();
                     </table>
                 </div>
 
-                <!-- PAGINATION -->
                 <?php if ($totalPages > 1): ?>
                     <div class="admin-pagination">
                         <span>Showing page <?php echo $page; ?> of <?php echo $totalPages; ?> (<?php echo $totalFiltered; ?> total records)</span>
@@ -577,14 +623,14 @@ $leadsList = $leadsStmt->fetchAll();
                             <?php for ($p = 1; $p <= $totalPages; $p++): ?>
                                 <?php
                                 $pageQuery = http_build_query([
-                                    'tab'       => 'leads',
-                                    'q'         => $searchQuery,
-                                    'status'    => $filterStatus,
-                                    'service'   => $filterService,
-                                    'date_from' => $dateFrom,
-                                    'date_to'   => $dateTo,
-                                    'test_mode' => $testMode,
-                                    'page'      => $p,
+                                    'tab'        => 'leads',
+                                    'q'          => $searchQuery,
+                                    'status'     => $filterStatus,
+                                    'ad_channel' => $filterChannel,
+                                    'priority'   => $filterPriority,
+                                    'service'    => $filterService,
+                                    'test_mode'  => $testMode,
+                                    'page'       => $p,
                                 ]);
                                 ?>
                                 <a href="/admin?<?php echo skyca_e($pageQuery); ?>" class="page-num-btn <?php echo $p === $page ? 'active' : ''; ?>">
@@ -596,25 +642,201 @@ $leadsList = $leadsStmt->fetchAll();
                 <?php endif; ?>
             </section>
 
-            <!-- LEAD DETAILS & STATUS WORKFLOW MODAL -->
+            <!-- LEAD CRM MODAL -->
             <div class="admin-modal-backdrop hidden" id="lead-detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-lead-title">
                 <div class="admin-modal-card">
                     <div class="admin-modal-header">
-                        <h2 id="modal-lead-title">Enquiry Details</h2>
+                        <h2 id="modal-lead-title">CRM Lead &amp; Ads Attribution Profile</h2>
                         <button type="button" class="modal-close-btn" id="close-lead-modal-btn" aria-label="Close modal">&times;</button>
                     </div>
                     <div class="admin-modal-body" id="modal-lead-body">
-                        <p>Loading enquiry details...</p>
+                        <p>Loading CRM lead profile...</p>
                     </div>
                 </div>
             </div>
+
+        <?php elseif ($tab === 'crm_ads'): ?>
+            <?php
+            // Fetch Ad Channel Attribution Breakdown
+            $channelStmt = $pdo->query("
+                SELECT
+                    ad_channel,
+                    COUNT(*) AS leads_count,
+                    SUM(CASE WHEN lead_priority = 'Hot' THEN 1 ELSE 0 END) AS hot_count,
+                    SUM(CASE WHEN status = 'Converted' THEN 1 ELSE 0 END) AS converted_count,
+                    SUM(COALESCE(deal_value, 0)) AS total_deal_value
+                FROM leads
+                {$kpiCondition}
+                GROUP BY ad_channel
+                ORDER BY leads_count DESC
+            ");
+            $channelStats = $channelStmt ? $channelStmt->fetchAll() : [];
+
+            // Fetch Top UTM Campaigns Breakdown
+            $campaignStmt = $pdo->query("
+                SELECT
+                    COALESCE(NULLIF(utm_campaign, ''), '(Direct / Unspecified Campaign)') AS campaign_name,
+                    COALESCE(NULLIF(utm_source, ''), 'Direct') AS source_name,
+                    COALESCE(NULLIF(utm_medium, ''), '-') AS medium_name,
+                    COUNT(*) AS leads_count,
+                    SUM(CASE WHEN status = 'Converted' THEN 1 ELSE 0 END) AS converted_count,
+                    SUM(COALESCE(deal_value, 0)) AS pipeline_value
+                FROM leads
+                {$kpiCondition}
+                GROUP BY campaign_name, source_name, medium_name
+                ORDER BY leads_count DESC
+                LIMIT 15
+            ");
+            $campaignStats = $campaignStmt ? $campaignStmt->fetchAll() : [];
+            ?>
+
+            <!-- 1. AD CHANNEL ROI & ATTRIBUTION ANALYTICS -->
+            <section class="admin-panel-card">
+                <h2>Ads Attribution &amp; Channel ROI Analytics</h2>
+                <p class="text-muted mb-4">
+                    Real-time breakdown of incoming business enquiries by advertising network (Google Ads <code>gclid</code>, Meta Ads <code>fbclid</code>, LinkedIn Ads, Organic Search, and Direct traffic).
+                </p>
+
+                <div class="admin-table-responsive">
+                    <table class="admin-leads-table">
+                        <thead>
+                            <tr>
+                                <th>Acquisition Channel</th>
+                                <th>Total Leads</th>
+                                <th>Hot Leads 🔥</th>
+                                <th>Converted (Won)</th>
+                                <th>Conversion Rate</th>
+                                <th>Pipeline Value (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($channelStats)): ?>
+                                <tr>
+                                    <td colspan="6" class="empty-table-cell">No live campaign enquiries recorded yet.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($channelStats as $ch): ?>
+                                    <?php
+                                    $cnt  = (int) $ch['leads_count'];
+                                    $conv = (int) $ch['converted_count'];
+                                    $rate = $cnt > 0 ? round(($conv / $cnt) * 100, 1) : 0.0;
+                                    ?>
+                                    <tr>
+                                        <td><span class="channel-badge"><?php echo skyca_e($ch['ad_channel']); ?></span></td>
+                                        <td><strong><?php echo $cnt; ?></strong></td>
+                                        <td><?php echo (int) $ch['hot_count']; ?></td>
+                                        <td><?php echo $conv; ?></td>
+                                        <td><?php echo $rate; ?>%</td>
+                                        <td><strong>₹<?php echo number_format((float) $ch['total_deal_value']); ?></strong></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 2. UTM CAMPAIGN PERFORMANCE TABLE -->
+            <section class="admin-panel-card">
+                <h2>UTM Campaign Performance Breakdown</h2>
+                <p class="text-muted mb-4">
+                    Use UTM parameters on your Google Ads and Meta Ads destination URLs (e.g., <code>https://skycadigital.com/services/software-development?utm_source=google_ads&amp;utm_medium=cpc&amp;utm_campaign=custom_software_q4</code>) to track campaign-level ROI automatically.
+                </p>
+
+                <div class="admin-table-responsive">
+                    <table class="admin-leads-table">
+                        <thead>
+                            <tr>
+                                <th>UTM Campaign</th>
+                                <th>UTM Source</th>
+                                <th>UTM Medium</th>
+                                <th>Leads Captured</th>
+                                <th>Converted</th>
+                                <th>Pipeline Value (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($campaignStats)): ?>
+                                <tr>
+                                    <td colspan="6" class="empty-table-cell">No UTM campaign data recorded yet.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($campaignStats as $cmp): ?>
+                                    <tr>
+                                        <td><strong><?php echo skyca_e($cmp['campaign_name']); ?></strong></td>
+                                        <td><?php echo skyca_e($cmp['source_name']); ?></td>
+                                        <td><?php echo skyca_e($cmp['medium_name']); ?></td>
+                                        <td><strong><?php echo (int) $cmp['leads_count']; ?></strong></td>
+                                        <td><?php echo (int) $cmp['converted_count']; ?></td>
+                                        <td><strong>₹<?php echo number_format((float) $cmp['pipeline_value']); ?></strong></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. ADS PIXELS & EXTERNAL CRM WEBHOOK INTEGRATION -->
+            <section class="admin-panel-card">
+                <h2>Google Ads, Meta Pixel &amp; External CRM Webhook Integration</h2>
+                <p class="text-muted mb-6">
+                    Configure your Google Analytics 4, Google Ads Conversion Tracking, Meta Pixel, and real-time External CRM Webhook (compatible with Zoho CRM, HubSpot, LeadSquared, Pipedrive, Make, and Zapier).
+                </p>
+
+                <div id="admin-ads-crm-alert" class="form-alert hidden" role="alert"></div>
+
+                <form id="admin-ads-crm-form">
+                    <input type="hidden" name="action" value="save_ads_crm_settings">
+                    <input type="hidden" name="csrf_token" value="<?php echo skyca_e($csrfToken); ?>">
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Google Analytics 4 Measurement ID</label>
+                            <input type="text" name="google_analytics_id" class="form-control" value="<?php echo skyca_e($settings['google_analytics_id']); ?>" placeholder="G-XXXXXXXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Google Search Console Verification Code</label>
+                            <input type="text" name="google_site_verification" class="form-control" value="<?php echo skyca_e($settings['google_site_verification']); ?>" placeholder="Meta tag verification token">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Google Ads Conversion ID</label>
+                            <input type="text" name="google_ads_conversion_id" class="form-control" value="<?php echo skyca_e($settings['google_ads_conversion_id']); ?>" placeholder="AW-XXXXXXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Google Ads Conversion Label</label>
+                            <input type="text" name="google_ads_conversion_label" class="form-control" value="<?php echo skyca_e($settings['google_ads_conversion_label']); ?>" placeholder="AbCdEfGhIjKlMnOpQr">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Meta (Facebook / Instagram) Pixel ID</label>
+                            <input type="text" name="meta_pixel_id" class="form-control" value="<?php echo skyca_e($settings['meta_pixel_id']); ?>" placeholder="123456789012345">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Meta Conversions API (CAPI) Token (Optional)</label>
+                            <input type="password" name="meta_capi_token" class="form-control" value="<?php echo skyca_e($settings['meta_capi_token']); ?>" placeholder="EAAB...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">External CRM Webhook URL (Zoho / HubSpot / Zapier / Make)</label>
+                            <input type="url" id="crm-webhook-url-input" name="crm_webhook_url" class="form-control" value="<?php echo skyca_e($settings['crm_webhook_url']); ?>" placeholder="https://hooks.zapier.com/... or https://your-crm.com/webhook">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CRM Webhook Signing Secret (HMAC-SHA256 Header)</label>
+                            <input type="text" id="crm-webhook-secret-input" name="crm_webhook_secret" class="form-control" value="<?php echo skyca_e($settings['crm_webhook_secret']); ?>" placeholder="Optional secret for X-Skyca-Signature header">
+                        </div>
+                    </div>
+
+                    <div class="filter-btn-group mt-4">
+                        <button type="submit" class="btn btn-primary">Save Ads &amp; CRM Configuration</button>
+                        <button type="button" class="btn btn-secondary" id="test-crm-webhook-btn">Send Test Lead to CRM Webhook</button>
+                    </div>
+                </form>
+            </section>
 
         <?php elseif ($tab === 'settings'): ?>
             <?php
             $activeDriver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
             $runtimeDbCfg = skyca_load_runtime_db_config();
             ?>
-            <!-- MYSQL DATABASE CONNECTION PANEL (u591469534_skyca) -->
             <section class="admin-panel-card">
                 <h2>MySQL Database Connection (<code>u591469534_skyca</code>)</h2>
                 <p class="text-muted mb-4">
@@ -651,7 +873,6 @@ $leadsList = $leadsStmt->fetchAll();
                 </form>
             </section>
 
-            <!-- OPTIONAL VERIFIED COMPANY PROFILE & NOTIFICATION SETTINGS -->
             <section class="admin-panel-card">
                 <h2>Verified Company Profile &amp; Notification Settings</h2>
                 <p class="text-muted mb-6">
@@ -712,7 +933,6 @@ $leadsList = $leadsStmt->fetchAll();
             </section>
 
         <?php elseif ($tab === 'password'): ?>
-            <!-- SECURE ADMIN PASSWORD CHANGE -->
             <section class="admin-panel-card max-w-lg">
                 <h2>Change Administrator Password</h2>
                 <p class="text-muted mb-6">Ensure your new password is at least 10 characters long and uses a mix of letters, numbers, and symbols.</p>

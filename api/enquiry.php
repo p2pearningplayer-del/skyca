@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 /**
- * SKYCA DIGITAL PRIVATE LIMITED — PROJECT ENQUIRY SUBMISSION API (/api/enquiry)
- * Validates, rate-limits, deduplicates, stores leads in MySQL transactionally,
- * and triggers non-blocking SMTP notifications.
+ * SKYCA DIGITAL PRIVATE LIMITED — PROJECT ENQUIRY & ADS CRM CAPTURE API (/api/enquiry)
+ * Validates, rate-limits, deduplicates, classifies Ad Channel & Lead Priority,
+ * stores leads transactionally, triggers SMTP emails, and dispatches CRM webhooks.
  */
 
 require_once dirname(__DIR__) . '/config/config.php';
@@ -20,9 +20,6 @@ $wantsJson = (
     (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower((string) $_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')
 );
 
-/**
- * Send standardized JSON or redirect response.
- */
 function skyca_enquiry_respond(int $statusCode, array $payload, bool $asJson): never
 {
     http_response_code($statusCode);
@@ -43,6 +40,123 @@ function skyca_enquiry_respond(int $statusCode, array $payload, bool $asJson): n
     exit;
 }
 
+/**
+ * Automatically classify the Ad Channel from click IDs, UTM tags, and HTTP Referrer.
+ */
+function skyca_classify_ad_channel(string $gclid, string $fbclid, string $msclkid, string $utmSource, string $utmMedium, string $referrer): string
+{
+    $src = strtolower($utmSource);
+    $med = strtolower($utmMedium);
+    $ref = strtolower($referrer);
+
+    if ($gclid !== '' || str_contains($src, 'google') && in_array($med, ['cpc', 'ppc', 'paid', 'ads', 'gdn'], true) || $src === 'google_ads') {
+        return 'Google Ads';
+    }
+    if ($fbclid !== '' || in_array($src, ['facebook', 'instagram', 'meta', 'fb', 'ig', 'meta_ads'], true)) {
+        return 'Meta Ads';
+    }
+    if ($msclkid !== '' || str_contains($src, 'bing') || str_contains($src, 'microsoft')) {
+        return 'Microsoft Ads';
+    }
+    if (str_contains($src, 'linkedin')) {
+        return 'LinkedIn Ads';
+    }
+    if (in_array($med, ['cpc', 'ppc', 'paid', 'paidsocial', 'display'], true) || $src !== '') {
+        return 'Campaign (' . ($utmSource ?: $utmMedium) . ')';
+    }
+    if (str_contains($ref, 'google.') || str_contains($ref, 'bing.') || str_contains($ref, 'duckduckgo.') || str_contains($ref, 'yahoo.')) {
+        return 'Organic Search';
+    }
+    if ($ref !== '' && !str_contains($ref, 'skycadigital.com')) {
+        return 'Referral';
+    }
+    return 'Direct / Organic';
+}
+
+/**
+ * Estimate initial deal pipeline value (INR) and priority from selected budget & timeline.
+ */
+function skyca_score_lead_crm(string $budget, string $timeline, string $adChannel): array
+{
+    $dealValue = 0.0;
+    if (str_contains($budget, '15,00,000+')) {
+        $dealValue = 1500000.00;
+    } elseif (str_contains($budget, '5,00,000')) {
+        $dealValue = 500000.00;
+    } elseif (str_contains($budget, '1,50,000')) {
+        $dealValue = 150000.00;
+    } elseif (str_contains($budget, '50,000')) {
+        $dealValue = 50000.00;
+    }
+
+    $isPaidAd = in_array($adChannel, ['Google Ads', 'Meta Ads', 'Microsoft Ads', 'LinkedIn Ads'], true);
+    $isUrgent = str_contains(strtolower($timeline), 'immediate') || str_contains(strtolower($timeline), '1 month');
+
+    if ($dealValue >= 500000 || ($isPaidAd && $isUrgent) || ($dealValue >= 150000 && $isUrgent)) {
+        $priority = 'Hot';
+    } elseif ($isPaidAd || $dealValue >= 50000 || $isUrgent) {
+        $priority = 'Warm';
+    } else {
+        $priority = 'Normal';
+    }
+
+    return [
+        'deal_value'    => $dealValue,
+        'lead_priority' => $priority,
+    ];
+}
+
+/**
+ * Push lead payload to an external CRM Webhook (HubSpot, Zoho, LeadSquared, Make, Zapier, Custom) if configured.
+ */
+function skyca_dispatch_crm_webhook(PDO $pdo, int $leadId, array $leadPayload): bool
+{
+    $settings   = skyca_get_settings();
+    $webhookUrl = trim((string) ($settings['crm_webhook_url'] ?? ''));
+    if ($webhookUrl === '' || !filter_var($webhookUrl, FILTER_VALIDATE_URL)) {
+        return false;
+    }
+
+    $secret = (string) ($settings['crm_webhook_secret'] ?? '');
+    $jsonBody = (string) json_encode([
+        'event'     => 'skyca.lead.created',
+        'timestamp' => date('c'),
+        'source'    => SITE_URL,
+        'lead'      => $leadPayload,
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+    $headers = [
+        'Content-Type: application/json',
+        'User-Agent: SkycaDigital-CRM-Webhook/1.0',
+    ];
+    if ($secret !== '') {
+        $headers[] = 'X-Skyca-Signature: ' . hash_hmac('sha256', $jsonBody, $secret);
+    }
+
+    try {
+        $ch = curl_init($webhookUrl);
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => $jsonBody,
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT        => 5,
+        ]);
+        curl_exec($ch);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        unset($ch);
+
+        if ($httpCode >= 200 && $httpCode < 300) {
+            $upd = $pdo->prepare('UPDATE leads SET crm_webhook_synced = 1 WHERE id = :id');
+            $upd->execute([':id' => $leadId]);
+            return true;
+        }
+    } catch (Throwable $e) {
+        error_log('[SkycaCRM Webhook Error] ' . $e->getMessage());
+    }
+    return false;
+}
+
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
     skyca_enquiry_respond(405, [
         'success' => false,
@@ -50,7 +164,6 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
     ], true);
 }
 
-// Parse JSON body if Content-Type is application/json, otherwise use $_POST
 $input = $_POST;
 $contentType = strtolower((string) ($_SERVER['CONTENT_TYPE'] ?? ''));
 if (str_contains($contentType, 'application/json')) {
@@ -62,7 +175,7 @@ if (str_contains($contentType, 'application/json')) {
     $wantsJson = true;
 }
 
-// 1. Honeypot Spam Check (Silently reject bots filling hidden field)
+// 1. Honeypot Spam Check
 $honeypot = trim((string) ($input['website_url_hp'] ?? ''));
 if ($honeypot !== '') {
     skyca_enquiry_respond(400, [
@@ -80,7 +193,7 @@ if (!skyca_verify_csrf($csrfToken)) {
     ], $wantsJson);
 }
 
-// 3. Form Timestamp Check (Reject forged or expired tokens)
+// 3. Form Timestamp Check
 $formToken = (string) ($input['form_token'] ?? '');
 if (!skyca_verify_form_timestamp($formToken, 0)) {
     skyca_enquiry_respond(400, [
@@ -89,7 +202,7 @@ if (!skyca_verify_form_timestamp($formToken, 0)) {
     ], $wantsJson);
 }
 
-// 4. Rate Limiting Check (Max 8 submissions per 15 minutes per IP)
+// 4. Rate Limiting Check
 $rateCheck = skyca_check_rate_limit('enquiry_submit', 8, 900, 900, true);
 if (!$rateCheck['allowed']) {
     skyca_enquiry_respond(429, [
@@ -153,7 +266,7 @@ if (!empty($errors)) {
     ], $wantsJson);
 }
 
-// 6. Sanitize Attribution Data
+// 6. Sanitize Attribution & Ad Click IDs
 $landingPage = skyca_clean_input((string) ($input['landing_page'] ?? ''), 500, false);
 $referrer    = skyca_clean_input((string) ($input['referrer'] ?? ''), 500, false);
 $utmSource   = skyca_clean_input((string) ($input['utm_source'] ?? ''), 150, false);
@@ -161,8 +274,14 @@ $utmMedium   = skyca_clean_input((string) ($input['utm_medium'] ?? ''), 150, fal
 $utmCampaign = skyca_clean_input((string) ($input['utm_campaign'] ?? ''), 150, false);
 $utmContent  = skyca_clean_input((string) ($input['utm_content'] ?? ''), 150, false);
 $utmTerm     = skyca_clean_input((string) ($input['utm_term'] ?? ''), 150, false);
+$gclid       = skyca_clean_input((string) ($input['gclid'] ?? ''), 255, false);
+$fbclid      = skyca_clean_input((string) ($input['fbclid'] ?? ''), 255, false);
+$msclkid     = skyca_clean_input((string) ($input['msclkid'] ?? ''), 255, false);
 
-// 7. Determine if this is a Test Enquiry (clearly distinguished from genuine leads)
+$adChannel   = skyca_classify_ad_channel($gclid, $fbclid, $msclkid, $utmSource, $utmMedium, $referrer);
+$crmScoring  = skyca_score_lead_crm($estimatedBudget, $projectTimeline, $adChannel);
+
+// 7. Determine if this is a Test Enquiry
 $isTest = (
     !empty($input['is_test']) ||
     (isset($_SERVER['HTTP_X_SKYCA_TEST']) && $_SERVER['HTTP_X_SKYCA_TEST'] === '1') ||
@@ -171,17 +290,14 @@ $isTest = (
     str_ends_with($businessEmail, '.test')
 ) ? 1 : 0;
 
-// 8. Compute Idempotency / Duplicate Submission Hash
 $submissionHash = hash('sha256', strtolower($businessEmail) . '|' . $requestedService . '|' . strtolower(trim($projectDescription)));
 $ipHash         = skyca_client_ip_hash();
 $now            = date('Y-m-d H:i:s');
-$windowCutoff   = date('Y-m-d H:i:s', time() - 900); // 15-minute duplicate guard window
+$windowCutoff   = date('Y-m-d H:i:s', time() - 900);
 
-// 9. Persist to Database inside a Transaction
 try {
     $pdo = skyca_db();
 
-    // Check for duplicate submission within the last 15 minutes
     $dupStmt = $pdo->prepare('
         SELECT lead_reference
         FROM leads
@@ -227,6 +343,12 @@ try {
             utm_campaign,
             utm_content,
             utm_term,
+            gclid,
+            fbclid,
+            msclkid,
+            ad_channel,
+            lead_priority,
+            deal_value,
             consent_status,
             consent_timestamp,
             status,
@@ -253,6 +375,12 @@ try {
             :utm_campaign,
             :utm_content,
             :utm_term,
+            :gclid,
+            :fbclid,
+            :msclkid,
+            :ad_channel,
+            :lead_priority,
+            :deal_value,
             1,
             :consent_timestamp,
             :status,
@@ -265,7 +393,7 @@ try {
         )
     ');
 
-    $leadRecord = [
+    $insertStmt->execute([
         ':lead_reference'      => $leadReference,
         ':full_name'           => $fullName,
         ':business_email'      => $businessEmail,
@@ -282,6 +410,12 @@ try {
         ':utm_campaign'        => $utmCampaign !== '' ? $utmCampaign : null,
         ':utm_content'         => $utmContent !== '' ? $utmContent : null,
         ':utm_term'            => $utmTerm !== '' ? $utmTerm : null,
+        ':gclid'               => $gclid !== '' ? $gclid : null,
+        ':fbclid'              => $fbclid !== '' ? $fbclid : null,
+        ':msclkid'             => $msclkid !== '' ? $msclkid : null,
+        ':ad_channel'          => $adChannel,
+        ':lead_priority'       => $crmScoring['lead_priority'],
+        ':deal_value'          => $crmScoring['deal_value'],
         ':consent_timestamp'   => $now,
         ':status'              => 'New',
         ':is_test'             => $isTest,
@@ -289,19 +423,15 @@ try {
         ':ip_hash'             => $ipHash,
         ':created_at'          => $now,
         ':updated_at'          => $now,
-    ];
-
-    $insertStmt->execute($leadRecord);
+    ]);
     $leadId = (int) $pdo->lastInsertId();
 
     $pdo->commit();
 
-    // Store non-PII reference in session to authorize conversion event on Thank You page
     $_SESSION['last_verified_lead_ref'] = $leadReference;
     $_SESSION['last_verified_service']  = $requestedService;
 
-    // 10. Trigger Email Notification (Safe: never loses stored lead if SMTP fails or is unconfigured)
-    $emailResult = skyca_dispatch_lead_emails($pdo, $leadId, [
+    $leadDataPayload = [
         'lead_reference'      => $leadReference,
         'full_name'           => $fullName,
         'business_email'      => $businessEmail,
@@ -311,15 +441,26 @@ try {
         'estimated_budget'    => $estimatedBudget,
         'project_timeline'    => $projectTimeline,
         'project_description' => $projectDescription,
+        'ad_channel'          => $adChannel,
+        'lead_priority'       => $crmScoring['lead_priority'],
+        'deal_value'          => $crmScoring['deal_value'],
         'landing_page'        => $landingPage,
         'utm_source'          => $utmSource,
         'utm_medium'          => $utmMedium,
         'utm_campaign'        => $utmCampaign,
-    ]);
+        'gclid'               => $gclid,
+        'fbclid'              => $fbclid,
+    ];
+
+    // Trigger SMTP notification and optional External CRM Webhook push
+    $emailResult = skyca_dispatch_lead_emails($pdo, $leadId, $leadDataPayload);
+    skyca_dispatch_crm_webhook($pdo, $leadId, $leadDataPayload);
 
     skyca_enquiry_respond(201, [
         'success'        => true,
         'lead_reference' => $leadReference,
+        'ad_channel'     => $adChannel,
+        'lead_priority'  => $crmScoring['lead_priority'],
         'email_status'   => $emailResult['status'] ?? 'not_configured',
         'message'        => 'Thank you! Your project enquiry has been recorded under reference ' . $leadReference . '.',
         'redirect_url'   => '/thank-you?ref=' . rawurlencode($leadReference),

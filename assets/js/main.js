@@ -18,7 +18,7 @@
             var attr = existingRaw ? JSON.parse(existingRaw) : {};
 
             var params = new URLSearchParams(window.location.search);
-            var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+            var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'gclid', 'fbclid', 'msclkid'];
 
             if (!attr.landing_page) {
                 attr.landing_page = window.location.pathname + window.location.search;
@@ -44,7 +44,10 @@
                 '.attr-utm-medium': attr.utm_medium || '',
                 '.attr-utm-campaign': attr.utm_campaign || '',
                 '.attr-utm-content': attr.utm_content || '',
-                '.attr-utm-term': attr.utm_term || ''
+                '.attr-utm-term': attr.utm_term || '',
+                '.attr-gclid': attr.gclid || '',
+                '.attr-fbclid': attr.fbclid || '',
+                '.attr-msclkid': attr.msclkid || ''
             };
 
             Object.keys(fieldMap).forEach(function (selector) {
@@ -462,11 +465,66 @@
         if (pageOpenBtn) pageOpenBtn.addEventListener('click', reopenBanner);
     }
 
+    // ------------------------------------------------------------------------
+    // 6. PROFESSIONAL CORPORATE 3D PERSPECTIVE TILT & DEPTH ENGINE
+    // ------------------------------------------------------------------------
+    function init3DInteractiveStage() {
+        // Respect reduced motion accessibility preference
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+
+        var selector = [
+            '.architecture-showcase-card',
+            '.service-card',
+            '.why-feature-card',
+            '.process-step-card',
+            '.industry-card',
+            '.cap-group-card',
+            '.problem-card',
+            '.philosophy-card',
+            '.service-quick-summary-card'
+        ].join(', ');
+
+        var cards = document.querySelectorAll(selector);
+        cards.forEach(function (card) {
+            card.classList.add('card-3d-surface');
+
+            var isHeroStage = card.classList.contains('architecture-showcase-card');
+            var maxRotate = isHeroStage ? 6.5 : 5;
+
+            card.addEventListener('mousemove', function (e) {
+                if (window.innerWidth < 960) return;
+                var rect = card.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                var y = e.clientY - rect.top;
+                var centerX = rect.width / 2;
+                var centerY = rect.height / 2;
+
+                var rotateX = ((y - centerY) / centerY) * -maxRotate;
+                var rotateY = ((x - centerX) / centerX) * maxRotate;
+
+                card.style.setProperty('--rx', rotateX.toFixed(2) + 'deg');
+                card.style.setProperty('--ry', rotateY.toFixed(2) + 'deg');
+                card.style.setProperty('--glare-x', ((x / rect.width) * 100).toFixed(1) + '%');
+                card.style.setProperty('--glare-y', ((y / rect.height) * 100).toFixed(1) + '%');
+                card.classList.add('is-tilting-3d');
+            });
+
+            card.addEventListener('mouseleave', function () {
+                card.style.setProperty('--rx', '0deg');
+                card.style.setProperty('--ry', '0deg');
+                card.classList.remove('is-tilting-3d');
+            });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         captureAttribution();
         initNavigation();
         initFaqAccordions();
         initEnquiryForms();
         initCookieConsent();
+        init3DInteractiveStage();
     });
 })();

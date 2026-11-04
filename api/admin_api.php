@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * SKYCA DIGITAL PRIVATE LIMITED — AUTHENTICATED ADMIN API (api/admin_api.php)
+ * SKYCA DIGITAL PRIVATE LIMITED — AUTHENTICATED ADMIN & ADS CRM API (api/admin_api.php)
  * Protected by server-side session authentication, CSRF verification, and prepared SQL queries.
  */
 
@@ -30,7 +30,7 @@ try {
     $pdo = skyca_db();
 
     // ------------------------------------------------------------------------
-    // ACTION 1: GET FULL LEAD DETAILS + NOTES HISTORY (GET)
+    // ACTION 1: GET FULL LEAD DETAILS + CRM NOTES HISTORY (GET)
     // ------------------------------------------------------------------------
     if ($action === 'get_lead' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
         $leadId = (int) ($_GET['id'] ?? 0);
@@ -52,7 +52,6 @@ try {
             exit;
         }
 
-        // Remove internal hash fields before returning to UI
         unset($lead['submission_hash'], $lead['ip_hash']);
 
         $notesStmt = $pdo->prepare('SELECT id, admin_username, note_text, created_at FROM lead_notes WHERE lead_id = :lead_id ORDER BY id DESC');
@@ -79,20 +78,39 @@ try {
         }
 
         // --------------------------------------------------------------------
-        // ACTION 2: UPDATE LEAD STATUS & ADD INTERNAL NOTE
+        // ACTION 2: UPDATE LEAD CRM PIPELINE, PRIORITY, DEAL VALUE & NOTES
         // --------------------------------------------------------------------
         if ($action === 'update_lead') {
-            $leadId        = (int) ($_POST['lead_id'] ?? 0);
-            $newStatus     = skyca_clean_input((string) ($_POST['status'] ?? ''), 30, false);
-            $internalNotes = skyca_clean_input((string) ($_POST['internal_notes'] ?? ''), 4000, true);
-            $newNoteText   = skyca_clean_input((string) ($_POST['new_note'] ?? ''), 2000, true);
+            $leadId          = (int) ($_POST['lead_id'] ?? 0);
+            $newStatus       = skyca_clean_input((string) ($_POST['status'] ?? ''), 30, false);
+            $leadPriority    = skyca_clean_input((string) ($_POST['lead_priority'] ?? 'Normal'), 20, false);
+            $dealValue       = isset($_POST['deal_value']) ? max(0.0, (float) $_POST['deal_value']) : null;
+            $nextFollowupAt  = skyca_clean_input((string) ($_POST['next_followup_at'] ?? ''), 20, false);
+            $assignedTo      = skyca_clean_input((string) ($_POST['assigned_to'] ?? ''), 100, false);
+            $internalNotes   = skyca_clean_input((string) ($_POST['internal_notes'] ?? ''), 4000, true);
+            $newNoteText     = skyca_clean_input((string) ($_POST['new_note'] ?? ''), 2000, true);
 
-            $validStatuses = ['New', 'Contacted', 'Qualified', 'Converted', 'Closed'];
+            $validStatuses   = ['New', 'Contacted', 'Qualified', 'Proposal Sent', 'Converted', 'Closed'];
+            $validPriorities = ['Hot', 'Warm', 'Normal'];
+
             if ($leadId <= 0 || !in_array($newStatus, $validStatuses, true)) {
                 http_response_code(422);
                 header('Content-Type: application/json; charset=UTF-8');
                 echo json_encode(['success' => false, 'message' => 'Invalid lead ID or status value.']);
                 exit;
+            }
+            if (!in_array($leadPriority, $validPriorities, true)) {
+                $leadPriority = 'Normal';
+            }
+            if ($nextFollowupAt !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $nextFollowupAt)) {
+                $nextFollowupAt = '';
+            }
+
+            // Preserve existing deal_value if not explicitly posted
+            if ($dealValue === null) {
+                $curStmt = $pdo->prepare('SELECT deal_value FROM leads WHERE id = :id LIMIT 1');
+                $curStmt->execute([':id' => $leadId]);
+                $dealValue = (float) ($curStmt->fetchColumn() ?: 0.0);
             }
 
             $now = date('Y-m-d H:i:s');
@@ -101,15 +119,23 @@ try {
             $upd = $pdo->prepare('
                 UPDATE leads
                 SET status = :status,
+                    lead_priority = :lead_priority,
+                    deal_value = :deal_value,
+                    next_followup_at = :next_followup_at,
+                    assigned_to = :assigned_to,
                     internal_notes = :internal_notes,
                     updated_at = :updated_at
                 WHERE id = :id
             ');
             $upd->execute([
-                ':status'         => $newStatus,
-                ':internal_notes' => $internalNotes !== '' ? $internalNotes : null,
-                ':updated_at'     => $now,
-                ':id'             => $leadId,
+                ':status'           => $newStatus,
+                ':lead_priority'    => $leadPriority,
+                ':deal_value'       => $dealValue,
+                ':next_followup_at' => $nextFollowupAt !== '' ? $nextFollowupAt : null,
+                ':assigned_to'      => $assignedTo !== '' ? $assignedTo : null,
+                ':internal_notes'   => $internalNotes !== '' ? $internalNotes : null,
+                ':updated_at'       => $now,
+                ':id'               => $leadId,
             ]);
 
             if ($newNoteText !== '') {
@@ -120,7 +146,7 @@ try {
                 $noteIns->execute([
                     ':lead_id'        => $leadId,
                     ':admin_username' => $admin['username'] ?? 'admin',
-                    ':note_text'      => "[Status: {$newStatus}] " . $newNoteText,
+                    ':note_text'      => "[Status: {$newStatus} | Priority: {$leadPriority}] " . $newNoteText,
                     ':created_at'     => $now,
                 ]);
             }
@@ -130,7 +156,7 @@ try {
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode([
                 'success' => true,
-                'message' => 'Lead record updated successfully.',
+                'message' => 'CRM lead record updated successfully.',
             ]);
             exit;
         }
@@ -194,9 +220,9 @@ try {
         }
 
         // --------------------------------------------------------------------
-        // ACTION 4: SAVE VERIFIED COMPANY & NOTIFICATION SETTINGS
+        // ACTION 4: SAVE VERIFIED COMPANY, ADS PIXEL & CRM WEBHOOK SETTINGS
         // --------------------------------------------------------------------
-        if ($action === 'save_settings') {
+        if ($action === 'save_settings' || $action === 'save_ads_crm_settings') {
             $allowedKeys = [
                 'company_address',
                 'company_city',
@@ -213,6 +239,14 @@ try {
                 'social_facebook_url',
                 'social_instagram_url',
                 'email_notifications_enabled',
+                'google_analytics_id',
+                'google_ads_conversion_id',
+                'google_ads_conversion_label',
+                'meta_pixel_id',
+                'meta_capi_token',
+                'crm_webhook_url',
+                'crm_webhook_secret',
+                'google_site_verification',
             ];
 
             $now = date('Y-m-d H:i:s');
@@ -243,13 +277,83 @@ try {
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode([
                 'success' => true,
-                'message' => 'Company profile and notification settings saved.',
+                'message' => 'Configuration saved successfully.',
             ]);
             exit;
         }
 
         // --------------------------------------------------------------------
-        // ACTION 5: CONFIGURE & VERIFY MYSQL DATABASE (u591469534_skyca)
+        // ACTION 5: TEST EXTERNAL CRM WEBHOOK CONNECTION
+        // --------------------------------------------------------------------
+        if ($action === 'test_crm_webhook') {
+            $webhookUrl = trim((string) ($_POST['crm_webhook_url'] ?? ''));
+            $secret     = (string) ($_POST['crm_webhook_secret'] ?? '');
+
+            if ($webhookUrl === '' || !filter_var($webhookUrl, FILTER_VALIDATE_URL)) {
+                http_response_code(422);
+                header('Content-Type: application/json; charset=UTF-8');
+                echo json_encode(['success' => false, 'message' => 'Please enter a valid HTTPS Webhook URL first.']);
+                exit;
+            }
+
+            $sampleBody = (string) json_encode([
+                'event'     => 'skyca.lead.test_ping',
+                'timestamp' => date('c'),
+                'source'    => SITE_URL,
+                'lead'      => [
+                    'lead_reference'    => 'SKY-TEST-WEBHOOK',
+                    'full_name'         => '[TEST] Skyca CRM Webhook Verification',
+                    'business_email'    => 'info@skycadigital.com',
+                    'phone'             => '+91 6002064873',
+                    'requested_service' => 'SaaS Solutions & Cloud Services',
+                    'ad_channel'        => 'Google Ads',
+                    'lead_priority'     => 'Hot',
+                    'deal_value'        => 500000,
+                    'utm_source'        => 'google_ads',
+                    'utm_campaign'      => 'test_campaign',
+                ],
+            ], JSON_UNESCAPED_SLASHES);
+
+            $headers = [
+                'Content-Type: application/json',
+                'User-Agent: SkycaDigital-CRM-Webhook/1.0',
+            ];
+            if ($secret !== '') {
+                $headers[] = 'X-Skyca-Signature: ' . hash_hmac('sha256', $sampleBody, $secret);
+            }
+
+            $ch = curl_init($webhookUrl);
+            curl_setopt_array($ch, [
+                CURLOPT_POST           => true,
+                CURLOPT_POSTFIELDS     => $sampleBody,
+                CURLOPT_HTTPHEADER     => $headers,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT        => 6,
+            ]);
+            curl_exec($ch);
+            $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            unset($ch);
+
+            if ($httpCode >= 200 && $httpCode < 300) {
+                header('Content-Type: application/json; charset=UTF-8');
+                echo json_encode([
+                    'success' => true,
+                    'message' => "CRM Webhook responded with HTTP {$httpCode} OK!",
+                ]);
+                exit;
+            }
+
+            http_response_code(422);
+            header('Content-Type: application/json; charset=UTF-8');
+            echo json_encode([
+                'success' => false,
+                'message' => "Webhook endpoint returned HTTP {$httpCode}. Please verify the receiver URL.",
+            ]);
+            exit;
+        }
+
+        // --------------------------------------------------------------------
+        // ACTION 6: CONFIGURE & VERIFY MYSQL DATABASE (u591469534_skyca)
         // --------------------------------------------------------------------
         if ($action === 'save_db_config') {
             $dbHost = skyca_clean_input((string) ($_POST['db_host'] ?? 'localhost'), 120, false);

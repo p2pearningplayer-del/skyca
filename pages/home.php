@@ -50,12 +50,14 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<!-- 2. HERO SECTION -->
-<section class="hero-section">
+<!-- 2. HERO SECTION (PROFESSIONAL 3D SPATIAL STAGE) -->
+<section class="hero-section hero-3d-stage">
     <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container hero-container">
         <div class="hero-content">
-            <div class="hero-eyebrow-pill">
+            <div class="hero-eyebrow-pill badge-3d">
                 <span class="pulse-dot" aria-hidden="true"></span>
                 <span>Skyca Digital Private Limited &mdash; Enterprise IT &amp; Software Engineering</span>
             </div>
@@ -69,32 +71,32 @@ require dirname(__DIR__) . '/includes/header.php';
             </p>
 
             <div class="hero-cta-group">
-                <a href="#project-enquiry" class="btn btn-primary btn-lg">
+                <a href="#project-enquiry" class="btn btn-primary btn-lg btn-3d-primary">
                     <span>Discuss Your Project</span>
                     <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
-                <a href="/services" class="btn btn-secondary btn-lg">
+                <a href="/services" class="btn btn-secondary btn-lg btn-3d-secondary">
                     <span>Explore Our Services</span>
                 </a>
             </div>
 
             <!-- Capability-Focused Trust Pillars (Zero Fabricated Numbers) -->
             <div class="hero-trust-strip">
-                <div class="hero-trust-item">
+                <div class="hero-trust-item trust-card-3d">
                     <svg class="icon-sm text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
                     <div>
                         <strong>Security-First Engineering</strong>
                         <span>OWASP-aligned code &amp; data protection</span>
                     </div>
                 </div>
-                <div class="hero-trust-item">
+                <div class="hero-trust-item trust-card-3d">
                     <svg class="icon-sm text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
                     <div>
                         <strong>Clean, Maintainable Code</strong>
                         <span>Modular architecture built to scale</span>
                     </div>
                 </div>
-                <div class="hero-trust-item">
+                <div class="hero-trust-item trust-card-3d">
                     <svg class="icon-sm text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     <div>
                         <strong>Milestone-Driven Delivery</strong>
@@ -104,73 +106,99 @@ require dirname(__DIR__) . '/includes/header.php';
             </div>
         </div>
 
-        <!-- Hero Right Visual: Technical Architecture & Service Blueprint Card -->
-        <div class="hero-visual">
+        <!-- Hero Right Visual: Interactive 3D Technical Architecture & Isometric Stack Card -->
+        <div class="hero-visual scene-3d">
+            <!-- Floating 3D Satellite Badges -->
+            <div class="floating-3d-chip chip-top-right" aria-hidden="true">
+                <span class="chip-3d-dot"></span>
+                <span>Cloud &bull; AI &bull; Full-Stack</span>
+            </div>
+            <div class="floating-3d-chip chip-bottom-left" aria-hidden="true">
+                <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Ads CRM &amp; Security Hardened</span>
+            </div>
+
             <div class="architecture-showcase-card">
-                <div class="arch-card-header">
+                <div class="arch-card-header layer-3d-z2">
                     <div class="arch-brand-lockup">
                         <picture>
                             <source srcset="/assets/images/skyca-logo-mark.webp" type="image/webp">
                             <img src="/assets/images/skyca-logo-mark.png" alt="Skyca Digital Emblem" width="44" height="44" class="arch-emblem">
                         </picture>
                         <div>
-                            <span class="arch-card-title">Skyca Digital Architecture Stack</span>
+                            <span class="arch-card-title">Skyca 3D Enterprise Architecture</span>
                             <span class="arch-card-subtitle">End-to-End Business Technology Lifecycle</span>
                         </div>
                     </div>
                     <span class="arch-status-badge">Production Ready</span>
                 </div>
 
-                <!-- Interactive / Visual System Layers -->
-                <div class="arch-layers">
-                    <div class="arch-layer">
+                <!-- Interactive 3D Extruded System Layers -->
+                <div class="arch-layers layer-3d-z3">
+                    <div class="arch-layer arch-layer-3d">
                         <div class="arch-layer-num">01</div>
                         <div class="arch-layer-info">
                             <strong>Client &amp; Digital Experience Layer</strong>
                             <span>Corporate Websites &bull; Custom Web Portals &bull; Mobile Apps &bull; E-Commerce</span>
                         </div>
                     </div>
-                    <div class="arch-layer">
+                    <div class="arch-layer arch-layer-3d">
                         <div class="arch-layer-num">02</div>
                         <div class="arch-layer-info">
                             <strong>Application, API &amp; AI Automation Layer</strong>
                             <span>Custom Software &bull; Multi-Tenant SaaS &bull; REST APIs &bull; AI Workflows</span>
                         </div>
                     </div>
-                    <div class="arch-layer">
+                    <div class="arch-layer arch-layer-3d">
                         <div class="arch-layer-num">03</div>
                         <div class="arch-layer-info">
-                            <strong>Data, Cloud &amp; Security Foundation</strong>
-                            <span>MySQL / Cloud DBs &bull; Analytics Dashboards &bull; Application Hardening</span>
+                            <strong>Data, Cloud, Ads CRM &amp; Security Foundation</strong>
+                            <span>MySQL / Cloud DBs &bull; Ads Lead CRM &bull; Application Hardening</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Visual SVG System Diagram -->
-                <div class="arch-diagram-box" aria-hidden="true">
-                    <svg viewBox="0 0 460 110" class="arch-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="8" y="18" width="118" height="74" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
-                        <text x="67" y="48" text-anchor="middle" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Web &amp; Mobile</text>
-                        <text x="67" y="66" text-anchor="middle" fill="#033EB6" font-size="10" font-weight="600" font-family="Inter, sans-serif">Responsive UI</text>
+                <!-- Visual 3D Isometric System Diagram -->
+                <div class="arch-diagram-box layer-3d-z2" aria-hidden="true">
+                    <svg viewBox="0 0 460 120" class="arch-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="isoTop" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#058DF0"/>
+                                <stop offset="100%" stop-color="#033EB6"/>
+                            </linearGradient>
+                            <linearGradient id="isoCore" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#1E293B"/>
+                                <stop offset="100%" stop-color="#0B1528"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Left 3D Node -->
+                        <rect x="10" y="26" width="118" height="74" rx="10" fill="#DBEAFE" opacity="0.7"/>
+                        <rect x="6" y="20" width="118" height="74" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+                        <text x="65" y="50" text-anchor="middle" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Web &amp; Mobile</text>
+                        <text x="65" y="68" text-anchor="middle" fill="#033EB6" font-size="10" font-weight="600" font-family="Inter, sans-serif">3D Interactive UI</text>
 
-                        <path d="M126 55H168" stroke="#058DF0" stroke-width="2" stroke-dasharray="4 3"/>
-                        <circle cx="147" cy="55" r="4" fill="#033EB6"/>
+                        <path d="M124 57H166" stroke="#058DF0" stroke-width="2.2" stroke-dasharray="4 3"/>
+                        <circle cx="145" cy="57" r="4.5" fill="#033EB6"/>
 
-                        <rect x="168" y="12" width="124" height="86" rx="10" fill="#0B1528" stroke="#033EB6" stroke-width="2"/>
-                        <text x="230" y="45" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" font-family="Inter, sans-serif">Skyca Core Engine</text>
-                        <text x="230" y="63" text-anchor="middle" fill="#38BDF8" font-size="10" font-weight="600" font-family="Inter, sans-serif">APIs &bull; AI &bull; Security</text>
-                        <text x="230" y="80" text-anchor="middle" fill="#94A3B8" font-size="9" font-family="Inter, sans-serif">Validated Workflows</text>
+                        <!-- Center 3D Extruded Core Node -->
+                        <rect x="172" y="20" width="124" height="86" rx="12" fill="#033EB6" opacity="0.35"/>
+                        <rect x="166" y="12" width="124" height="86" rx="12" fill="url(#isoCore)" stroke="url(#isoTop)" stroke-width="2"/>
+                        <text x="228" y="44" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" font-family="Inter, sans-serif">Skyca Core Engine</text>
+                        <text x="228" y="62" text-anchor="middle" fill="#38BDF8" font-size="10" font-weight="600" font-family="Inter, sans-serif">APIs &bull; AI &bull; Security</text>
+                        <text x="228" y="80" text-anchor="middle" fill="#94A3B8" font-size="9" font-family="Inter, sans-serif">Ads CRM &amp; Workflows</text>
 
-                        <path d="M292 55H334" stroke="#058DF0" stroke-width="2" stroke-dasharray="4 3"/>
-                        <circle cx="313" cy="55" r="4" fill="#033EB6"/>
+                        <path d="M290 57H332" stroke="#058DF0" stroke-width="2.2" stroke-dasharray="4 3"/>
+                        <circle cx="311" cy="57" r="4.5" fill="#033EB6"/>
 
-                        <rect x="334" y="18" width="118" height="74" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
-                        <text x="393" y="48" text-anchor="middle" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Cloud &amp; Data</text>
-                        <text x="393" y="66" text-anchor="middle" fill="#033EB6" font-size="10" font-weight="600" font-family="Inter, sans-serif">Analytics &amp; Growth</text>
+                        <!-- Right 3D Node -->
+                        <rect x="338" y="26" width="116" height="74" rx="10" fill="#DBEAFE" opacity="0.7"/>
+                        <rect x="332" y="20" width="116" height="74" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+                        <text x="390" y="50" text-anchor="middle" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Cloud &amp; CRM</text>
+                        <text x="390" y="68" text-anchor="middle" fill="#033EB6" font-size="10" font-weight="600" font-family="Inter, sans-serif">MySQL &amp; Analytics</text>
                     </svg>
                 </div>
 
-                <div class="arch-card-footer">
+                <div class="arch-card-footer layer-3d-z1">
                     <span>Direct Engineering Consultation:</span>
                     <a href="tel:<?php echo skyca_e($settings['business_phone_raw']); ?>" class="arch-phone-link"><?php echo skyca_e($settings['business_phone']); ?></a>
                 </div>
