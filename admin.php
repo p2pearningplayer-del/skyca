@@ -610,6 +610,47 @@ $leadsList = $leadsStmt->fetchAll();
             </div>
 
         <?php elseif ($tab === 'settings'): ?>
+            <?php
+            $activeDriver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+            $runtimeDbCfg = skyca_load_runtime_db_config();
+            ?>
+            <!-- MYSQL DATABASE CONNECTION PANEL (u591469534_skyca) -->
+            <section class="admin-panel-card">
+                <h2>MySQL Database Connection (<code>u591469534_skyca</code>)</h2>
+                <p class="text-muted mb-4">
+                    Active Storage Engine:
+                    <strong><?php echo $activeDriver === 'mysql' ? 'MySQL (u591469534_skyca — Connected)' : 'Protected Local PDO Database (Ready — Enter Hostinger MySQL credentials below or in .env to switch to MySQL)'; ?></strong>
+                </p>
+
+                <div id="admin-db-alert" class="form-alert hidden" role="alert"></div>
+
+                <form id="admin-db-form">
+                    <input type="hidden" name="action" value="save_db_config">
+                    <input type="hidden" name="csrf_token" value="<?php echo skyca_e($csrfToken); ?>">
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Database Host</label>
+                            <input type="text" name="db_host" class="form-control" value="<?php echo skyca_e($runtimeDbCfg['db_host'] ?? skyca_env('DATABASE_HOST', 'localhost')); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Database Name</label>
+                            <input type="text" name="db_name" class="form-control" value="<?php echo skyca_e($runtimeDbCfg['db_name'] ?? skyca_env('DATABASE_NAME', 'u591469534_skyca')); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">MySQL Username (from Hostinger hPanel)</label>
+                            <input type="text" name="db_user" class="form-control" value="<?php echo skyca_e($runtimeDbCfg['db_user'] ?? skyca_env('DATABASE_USER', '')); ?>" placeholder="e.g., u591469534_skyca" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">MySQL Password</label>
+                            <input type="password" name="db_pass" class="form-control" placeholder="Enter your Hostinger MySQL password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-4">Test &amp; Save MySQL Connection</button>
+                </form>
+            </section>
+
             <!-- OPTIONAL VERIFIED COMPANY PROFILE & NOTIFICATION SETTINGS -->
             <section class="admin-panel-card">
                 <h2>Verified Company Profile &amp; Notification Settings</h2>

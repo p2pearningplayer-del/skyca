@@ -164,6 +164,27 @@
             });
         });
 
+        // Database Connection Form Handler
+        var dbForm = document.getElementById('admin-db-form');
+        if (dbForm) {
+            dbForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var alertEl = document.getElementById('admin-db-alert');
+                var fd = new FormData(dbForm);
+                fetch('/api/admin', { method: 'POST', body: fd })
+                    .then(function (r) { return r.json(); })
+                    .then(function (res) {
+                        if (alertEl) {
+                            alertEl.className = 'form-alert ' + (res.success ? 'alert-success' : 'alert-error');
+                            alertEl.textContent = res.message || 'Operation completed.';
+                        }
+                        if (res.success) {
+                            setTimeout(function () { window.location.reload(); }, 900);
+                        }
+                    });
+            });
+        }
+
         // Settings Form Handler
         var settingsForm = document.getElementById('admin-settings-form');
         if (settingsForm) {

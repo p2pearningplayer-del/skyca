@@ -60,14 +60,9 @@ echo "--- 1. Database Schema & Admin Setup ---\n";
 $pdo = skyca_db();
 assert_test('Database connection initialized', $pdo instanceof PDO);
 
-$adminPass = 'SkycaAdmin#2026!Secure';
-$hash = password_hash($adminPass, PASSWORD_DEFAULT);
-$now = date('Y-m-d H:i:s');
-$pdo->prepare('INSERT INTO admin_users (username, email, password_hash, full_name, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, 1, ?, ?)')
-    ->execute(['admin', 'info@skycadigital.com', $hash, 'QA Admin', $now, $now]);
-
+$adminPass = 'Skyca@2026#Admin';
 $adminRowCount = (int) $pdo->query('SELECT COUNT(*) FROM admin_users')->fetchColumn();
-assert_test('Admin account created with bcrypt password hash', $adminRowCount === 1);
+assert_test('Admin account auto-bootstrapped with bcrypt password hash', $adminRowCount === 1);
 
 // ----------------------------------------------------------------------------
 // 2. START LOCAL HTTP SERVER FOR LIVE HTTP / ROUTING / API TESTS

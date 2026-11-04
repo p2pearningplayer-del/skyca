@@ -247,6 +247,60 @@ try {
             ]);
             exit;
         }
+
+        // --------------------------------------------------------------------
+        // ACTION 5: CONFIGURE & VERIFY MYSQL DATABASE (u591469534_skyca)
+        // --------------------------------------------------------------------
+        if ($action === 'save_db_config') {
+            $dbHost = skyca_clean_input((string) ($_POST['db_host'] ?? 'localhost'), 120, false);
+            $dbPort = skyca_clean_input((string) ($_POST['db_port'] ?? '3306'), 10, false);
+            $dbName = skyca_clean_input((string) ($_POST['db_name'] ?? 'u591469534_skyca'), 100, false);
+            $dbUser = skyca_clean_input((string) ($_POST['db_user'] ?? ''), 100, false);
+            $dbPass = (string) ($_POST['db_pass'] ?? '');
+
+            if ($dbUser === '' || $dbPass === '') {
+                http_response_code(422);
+                header('Content-Type: application/json; charset=UTF-8');
+                echo json_encode(['success' => false, 'message' => 'Please enter both MySQL Database User and Password.']);
+                exit;
+            }
+
+            try {
+                $testDsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $dbHost, $dbPort, $dbName);
+                $testPdo = new PDO($testDsn, $dbUser, $dbPass, [
+                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES   => false,
+                    PDO::ATTR_TIMEOUT            => 8,
+                ]);
+                skyca_ensure_schema_mysql($testPdo);
+                skyca_bootstrap_initial_admin($testPdo);
+
+                $cfgFile = SKYCA_STORAGE_DIR . DIRECTORY_SEPARATOR . 'db_config.json';
+                @file_put_contents($cfgFile, json_encode([
+                    'db_host' => $dbHost,
+                    'db_port' => $dbPort,
+                    'db_name' => $dbName,
+                    'db_user' => $dbUser,
+                    'db_pass' => $dbPass,
+                ], JSON_PRETTY_PRINT), LOCK_EX);
+
+                header('Content-Type: application/json; charset=UTF-8');
+                echo json_encode([
+                    'success' => true,
+                    'message' => "Connected to MySQL database ({$dbName}) and verified tables successfully!",
+                ]);
+                exit;
+            } catch (Throwable $dbErr) {
+                http_response_code(422);
+                header('Content-Type: application/json; charset=UTF-8');
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'MySQL connection test failed. Please verify your Hostinger MySQL username and password for ' . $dbName . '.',
+                ]);
+                exit;
+            }
+        }
     }
 
     http_response_code(400);
