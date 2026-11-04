@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
+Allow: /assets/
+Allow: /services/
+Allow: /llms.txt
 
 # Disallow private admin and API endpoints from indexing
 Disallow: /admin

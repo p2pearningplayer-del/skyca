@@ -192,6 +192,10 @@ function skyca_get_settings(): array
         'crm_webhook_url'           => skyca_env('CRM_WEBHOOK_URL', ''),
         'crm_webhook_secret'        => skyca_env('CRM_WEBHOOK_SECRET', ''),
         'google_site_verification'  => skyca_env('GOOGLE_SITE_VERIFICATION', ''),
+        'bing_site_verification'    => skyca_env('BING_SITE_VERIFICATION', ''),
+        'seo_home_title'            => skyca_env('SEO_HOME_TITLE', ''),
+        'seo_home_description'      => skyca_env('SEO_HOME_DESCRIPTION', ''),
+        'seo_default_keywords'      => skyca_env('SEO_DEFAULT_KEYWORDS', 'Skyca Digital Private Limited, Skyca Digital, IT services company India, custom software development, website and mobile app development, SaaS and cloud solutions, AI solutions and IT consulting, digital marketing and cybersecurity, data analytics and technology support, e-commerce solutions India'),
         'email_notifications_enabled' => skyca_env_bool('SMTP_ENABLED', false) ? '1' : '0',
     ];
 

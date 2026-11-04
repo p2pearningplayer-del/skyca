@@ -70,12 +70,13 @@ RewriteRule ^ https://skycadigital.com%{REQUEST_URI} [R=301,L]
 # ----------------------------------------------------------------------------
 # 5. CLEAN URL ROUTING
 # ----------------------------------------------------------------------------
-# XML Sitemap route
+# XML Sitemap & AI Search (llms.txt) routes
 RewriteRule ^sitemap\.xml$ index.php?route=sitemap.xml [L,QSA]
+RewriteRule ^llms\.txt$ index.php?route=llms.txt [L,QSA]
 
 # Admin Dashboard routes
 RewriteRule ^admin/?$ admin.php [L,QSA]
-RewriteRule ^admin/(login|logout|leads|crm_ads|settings|password|export)/?$ admin.php?tab=$1 [L,QSA]
+RewriteRule ^admin/(login|logout|leads|crm_ads|seo|settings|password|export)/?$ admin.php?tab=$1 [L,QSA]
 
 # Backend API routes
 RewriteRule ^api/enquiry/?$ api/enquiry.php [L,QSA]

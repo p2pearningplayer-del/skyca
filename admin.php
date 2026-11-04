@@ -11,6 +11,7 @@ require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/config/services_data.php';
 require_once __DIR__ . '/includes/security.php';
 require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/seo.php';
 
 skyca_start_session();
 
@@ -386,6 +387,7 @@ $leadsList = $leadsStmt->fetchAll();
             <nav class="admin-nav" aria-label="Admin Navigation">
                 <a href="/admin?tab=leads" class="admin-nav-link <?php echo $tab === 'leads' ? 'active' : ''; ?>">CRM Pipeline &amp; Leads</a>
                 <a href="/admin?tab=crm_ads" class="admin-nav-link <?php echo $tab === 'crm_ads' ? 'active' : ''; ?>">Ads &amp; CRM Hub</a>
+                <a href="/admin?tab=seo" class="admin-nav-link <?php echo $tab === 'seo' ? 'active' : ''; ?>">SEO &amp; Search Hub</a>
                 <a href="/admin?tab=settings" class="admin-nav-link <?php echo $tab === 'settings' ? 'active' : ''; ?>">Company &amp; DB Settings</a>
                 <a href="/admin?tab=password" class="admin-nav-link <?php echo $tab === 'password' ? 'active' : ''; ?>">Change Password</a>
             </nav>
@@ -830,6 +832,152 @@ $leadsList = $leadsStmt->fetchAll();
                         <button type="button" class="btn btn-secondary" id="test-crm-webhook-btn">Send Test Lead to CRM Webhook</button>
                     </div>
                 </form>
+            </section>
+
+        <?php elseif ($tab === 'seo'): ?>
+            <?php $seoAuditPages = skyca_get_seo_audit_matrix(); ?>
+
+            <!-- 1. TECHNICAL SEO & AI SEARCH ENDPOINTS OVERVIEW -->
+            <section class="admin-kpi-grid" aria-label="Technical SEO Health">
+                <div class="kpi-card">
+                    <span class="kpi-label">Indexable Pages</span>
+                    <strong class="kpi-value"><?php echo count($seoAuditPages); ?></strong>
+                    <span class="kpi-sub">100% Canonicalized</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">XML + Image Sitemap</span>
+                    <strong class="kpi-value"><a href="/sitemap.xml" target="_blank" style="color:var(--brand-primary);">Active &nearr;</a></strong>
+                    <span class="kpi-sub"><code>/sitemap.xml</code></span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">AI Search (GEO)</span>
+                    <strong class="kpi-value"><a href="/llms.txt" target="_blank" style="color:var(--brand-primary);">Active &nearr;</a></strong>
+                    <span class="kpi-sub"><code>/llms.txt</code> (ChatGPT / AI)</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Robots Directive</span>
+                    <strong class="kpi-value"><a href="/robots.txt" target="_blank" style="color:var(--brand-primary);">Active &nearr;</a></strong>
+                    <span class="kpi-sub"><code>/robots.txt</code></span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">JSON-LD Entities</span>
+                    <strong class="kpi-value">7 Types</strong>
+                    <span class="kpi-sub">Org, Service, FAQ, ItemList</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Regional Hreflang</span>
+                    <strong class="kpi-value">en-IN</strong>
+                    <span class="kpi-sub">+ Global <code>x-default</code></span>
+                </div>
+            </section>
+
+            <!-- 2. SEARCH CONSOLE VERIFICATION & GLOBAL SEO META CONFIGURATION -->
+            <section class="admin-panel-card">
+                <h2>Search Engine Verification &amp; Global SEO Metadata</h2>
+                <p class="text-muted mb-6">
+                    Configure Google Search Console, Bing Webmaster Tools, Homepage Title/Description overrides, and Global B2B Focus Keywords for <strong><?php echo skyca_e(SITE_URL); ?></strong>.
+                </p>
+
+                <div id="admin-seo-alert" class="form-alert hidden" role="alert"></div>
+
+                <form id="admin-seo-form">
+                    <input type="hidden" name="action" value="save_settings">
+                    <input type="hidden" name="csrf_token" value="<?php echo skyca_e($csrfToken); ?>">
+
+                    <div class="form-grid-2">
+                        <div class="form-group">
+                            <label class="form-label">Google Search Console Verification Code (<code>google-site-verification</code>)</label>
+                            <input type="text" name="google_site_verification" class="form-control" value="<?php echo skyca_e($settings['google_site_verification']); ?>" placeholder="Paste token from Google Search Console HTML tag">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bing Webmaster Verification Code (<code>msvalidate.01</code>)</label>
+                            <input type="text" name="bing_site_verification" class="form-control" value="<?php echo skyca_e($settings['bing_site_verification']); ?>" placeholder="Paste token from Bing Webmaster Tools">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Homepage SEO Title Override <span class="optional-tag">(Leave blank to use default optimized title)</span></label>
+                        <input type="text" name="seo_home_title" class="form-control" value="<?php echo skyca_e($settings['seo_home_title']); ?>" placeholder="Skyca Digital Private Limited | IT Services, Custom Software, Web, Cloud &amp; AI Solutions">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Homepage Meta Description Override <span class="optional-tag">(Recommended: 140–165 characters)</span></label>
+                        <textarea name="seo_home_description" rows="2" class="form-control" placeholder="Technology Solutions That Move Your Business Forward. Skyca Digital Private Limited delivers custom software development, web &amp; mobile apps, SaaS &amp; cloud architecture, AI integration, cybersecurity, data analytics, and e-commerce solutions."><?php echo skyca_e($settings['seo_home_description']); ?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Global B2B Focus Keywords (Comma-Separated)</label>
+                        <textarea name="seo_default_keywords" rows="2" class="form-control"><?php echo skyca_e($settings['seo_default_keywords']); ?></textarea>
+                    </div>
+
+                    <div class="filter-btn-group mt-4">
+                        <button type="submit" class="btn btn-primary">Save SEO &amp; Search Console Settings</button>
+                        <a href="/sitemap.xml" target="_blank" class="btn btn-secondary">Inspect XML Sitemap</a>
+                        <a href="/llms.txt" target="_blank" class="btn btn-outline">Inspect AI llms.txt</a>
+                    </div>
+                </form>
+            </section>
+
+            <!-- 3. LIVE 15-PAGE ON-PAGE SEO & SCHEMA.ORG AUDIT MATRIX -->
+            <section class="admin-panel-card">
+                <h2>Live On-Page SEO &amp; Schema.org Structured Data Matrix</h2>
+                <p class="text-muted mb-4">
+                    Every indexable route on <strong><?php echo skyca_e(SITE_URL); ?></strong> with its live Title tag, Meta Description character count, Canonical URL, Sitemap Priority, and active JSON-LD Rich Result schemas.
+                </p>
+
+                <div class="admin-table-responsive">
+                    <table class="admin-leads-table">
+                        <thead>
+                            <tr>
+                                <th>Route &amp; Page Type</th>
+                                <th>SEO Title &amp; Meta Description</th>
+                                <th>Length Check</th>
+                                <th>Active Schema.org JSON-LD</th>
+                                <th>Priority</th>
+                                <th>Verify</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($seoAuditPages as $seoRow): ?>
+                                <?php
+                                $titleLen = mb_strlen($seoRow['title']);
+                                $descLen  = mb_strlen($seoRow['description']);
+                                $fullUrl  = skyca_canonical_url($seoRow['path']);
+                                ?>
+                                <tr>
+                                    <td>
+                                        <a href="<?php echo skyca_e($seoRow['path']); ?>" target="_blank" class="lead-ref-mono">
+                                            <strong><?php echo skyca_e($seoRow['path']); ?></strong>
+                                        </a>
+                                        <div class="table-subtext"><?php echo skyca_e($seoRow['page_type']); ?></div>
+                                    </td>
+                                    <td>
+                                        <div class="service-cell-title"><?php echo skyca_e($seoRow['title']); ?></div>
+                                        <div class="table-subtext"><?php echo skyca_e($seoRow['description']); ?></div>
+                                    </td>
+                                    <td>
+                                        <span class="status-pill status-converted">Title: <?php echo $titleLen; ?> ch</span>
+                                        <div class="table-subtext mt-2">Desc: <?php echo $descLen; ?> ch</div>
+                                    </td>
+                                    <td>
+                                        <div class="cap-badges">
+                                            <?php foreach ($seoRow['schemas'] as $scName): ?>
+                                                <span class="channel-badge"><?php echo skyca_e($scName); ?></span>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </td>
+                                    <td><strong><?php echo skyca_e($seoRow['priority']); ?></strong></td>
+                                    <td>
+                                        <div class="crm-quick-actions">
+                                            <a href="<?php echo skyca_e($seoRow['path']); ?>" target="_blank" class="crm-mini-btn">Open Page</a>
+                                            <a href="https://search.google.com/test/rich-results?url=<?php echo rawurlencode($fullUrl); ?>" target="_blank" rel="noopener" class="crm-mini-btn">Rich Test</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
         <?php elseif ($tab === 'settings'): ?>

@@ -247,6 +247,10 @@ try {
                 'crm_webhook_url',
                 'crm_webhook_secret',
                 'google_site_verification',
+                'bing_site_verification',
+                'seo_home_title',
+                'seo_home_description',
+                'seo_default_keywords',
             ];
 
             $now = date('Y-m-d H:i:s');

@@ -265,6 +265,24 @@
             });
         }
 
+        // SEO & Search Console Form Handler
+        var seoForm = document.getElementById('admin-seo-form');
+        if (seoForm) {
+            seoForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var alertEl = document.getElementById('admin-seo-alert');
+                var fd = new FormData(seoForm);
+                fetch('/api/admin', { method: 'POST', body: fd })
+                    .then(function (r) { return r.json(); })
+                    .then(function (res) {
+                        if (alertEl) {
+                            alertEl.className = 'form-alert ' + (res.success ? 'alert-success' : 'alert-error');
+                            alertEl.textContent = res.message || 'SEO configuration saved.';
+                        }
+                    });
+            });
+        }
+
         // Settings Form Handler
         var settingsForm = document.getElementById('admin-settings-form');
         if (settingsForm) {

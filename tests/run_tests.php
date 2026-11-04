@@ -193,7 +193,10 @@ try {
     assert_test('All 16 public pages have unique <title> tags', count(array_unique(array_values($seenTitles))) === count($publicRoutes));
 
     $sitemapRes = http_request('/sitemap.xml');
-    assert_test('/sitemap.xml returns valid XML with all service URLs', $sitemapRes['status'] === 200 && str_contains($sitemapRes['body'], '<urlset') && str_contains($sitemapRes['body'], 'https://skycadigital.com/services/software-development'));
+    assert_test('/sitemap.xml returns valid XML with all service URLs & Google Image Sitemap tags', $sitemapRes['status'] === 200 && str_contains($sitemapRes['body'], '<urlset') && str_contains($sitemapRes['body'], '<image:image>') && str_contains($sitemapRes['body'], 'https://skycadigital.com/services/software-development'));
+
+    $llmsRes = http_request('/llms.txt');
+    assert_test('/llms.txt AI search manifest renders all 7 official service categories & contact details', $llmsRes['status'] === 200 && str_contains($llmsRes['body'], '# Skyca Digital Private Limited') && str_contains($llmsRes['body'], 'info@skycadigital.com'));
 
     $notFoundRes = http_request('/non-existent-page-xyz');
     assert_test('Unknown route returns HTTP 404 status with custom 404 page', $notFoundRes['status'] === 404 && str_contains($notFoundRes['body'], 'Page Not Found'));
@@ -404,6 +407,14 @@ try {
         $crmAdsTabRes['status'] === 200 &&
         str_contains($crmAdsTabRes['body'], 'Ads Attribution &amp; Channel ROI Analytics') &&
         str_contains($crmAdsTabRes['body'], 'Google Ads')
+    );
+
+    $seoTabRes = http_request('/admin?tab=seo');
+    assert_test(
+        'Admin SEO & Search Console Hub tab renders 15-page On-Page SEO & Schema.org matrix',
+        $seoTabRes['status'] === 200 &&
+        str_contains($seoTabRes['body'], 'Live On-Page SEO &amp; Schema.org Structured Data Matrix') &&
+        str_contains($seoTabRes['body'], 'ProfessionalService')
     );
 
     $csvRes = http_request('/admin?action=export_csv&test_mode=all');

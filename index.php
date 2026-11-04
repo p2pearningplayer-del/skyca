@@ -52,6 +52,10 @@ if ($route === 'sitemap.xml') {
     require __DIR__ . '/pages/sitemap_xml.php';
     exit;
 }
+if ($route === 'llms.txt') {
+    require __DIR__ . '/pages/llms_txt.php';
+    exit;
+}
 
 // Legacy / convenience redirects (301 Permanent)
 $redirects = [

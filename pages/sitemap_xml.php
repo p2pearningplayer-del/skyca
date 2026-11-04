@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 /**
- * SKYCA DIGITAL PRIVATE LIMITED — DYNAMIC XML SITEMAP (pages/sitemap_xml.php)
- * Outputs valid application/xml sitemap for all public indexable URLs.
+ * SKYCA DIGITAL PRIVATE LIMITED — DYNAMIC XML SITEMAP + GOOGLE IMAGE SITEMAP (pages/sitemap_xml.php)
+ * Outputs valid application/xml sitemap for all public indexable URLs with official brand image metadata.
  */
 
 require_once dirname(__DIR__) . '/config/config.php';
@@ -16,8 +16,32 @@ $allServices = skyca_get_all_services();
 $lastmod     = date('Y-m-d');
 
 $urls = [
-    ['loc' => skyca_canonical_url('/'),          'changefreq' => 'weekly',  'priority' => '1.0'],
-    ['loc' => skyca_canonical_url('/services'),  'changefreq' => 'weekly',  'priority' => '0.9'],
+    [
+        'loc'        => skyca_canonical_url('/'),
+        'changefreq' => 'weekly',
+        'priority'   => '1.0',
+        'images'     => [
+            [
+                'loc'   => SITE_URL . '/assets/images/og-cover.jpg',
+                'title' => COMPANY_LEGAL_NAME . ' — Enterprise IT & Software Development Company',
+            ],
+            [
+                'loc'   => SITE_URL . '/assets/images/skyca-logo-original.jpg',
+                'title' => COMPANY_LEGAL_NAME . ' Official Logo',
+            ],
+        ],
+    ],
+    [
+        'loc'        => skyca_canonical_url('/services'),
+        'changefreq' => 'weekly',
+        'priority'   => '0.9',
+        'images'     => [
+            [
+                'loc'   => SITE_URL . '/assets/images/og-cover.jpg',
+                'title' => 'IT Services & Software Development Solutions — ' . COMPANY_LEGAL_NAME,
+            ],
+        ],
+    ],
 ];
 
 foreach ($allServices as $srv) {
@@ -25,10 +49,26 @@ foreach ($allServices as $srv) {
         'loc'        => skyca_canonical_url('/services/' . $srv['slug']),
         'changefreq' => 'weekly',
         'priority'   => '0.9',
+        'images'     => [
+            [
+                'loc'   => SITE_URL . '/assets/images/og-cover.jpg',
+                'title' => $srv['title'] . ' | ' . COMPANY_LEGAL_NAME,
+            ],
+        ],
     ];
 }
 
-$urls[] = ['loc' => skyca_canonical_url('/about'),                'changefreq' => 'monthly', 'priority' => '0.8'];
+$urls[] = [
+    'loc'        => skyca_canonical_url('/about'),
+    'changefreq' => 'monthly',
+    'priority'   => '0.8',
+    'images'     => [
+        [
+            'loc'   => SITE_URL . '/assets/images/skyca-logo-full.png',
+            'title' => 'About ' . COMPANY_LEGAL_NAME,
+        ],
+    ],
+];
 $urls[] = ['loc' => skyca_canonical_url('/contact'),              'changefreq' => 'monthly', 'priority' => '0.9'];
 $urls[] = ['loc' => skyca_canonical_url('/faq'),                  'changefreq' => 'monthly', 'priority' => '0.7'];
 $urls[] = ['loc' => skyca_canonical_url('/privacy-policy'),       'changefreq' => 'yearly',  'priority' => '0.4'];
@@ -37,13 +77,22 @@ $urls[] = ['loc' => skyca_canonical_url('/cookie-policy'),        'changefreq' =
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 <?php foreach ($urls as $u): ?>
     <url>
         <loc><?php echo htmlspecialchars($u['loc'], ENT_XML1, 'UTF-8'); ?></loc>
         <lastmod><?php echo $lastmod; ?></lastmod>
         <changefreq><?php echo $u['changefreq']; ?></changefreq>
         <priority><?php echo $u['priority']; ?></priority>
+<?php if (!empty($u['images'])): ?>
+<?php foreach ($u['images'] as $img): ?>
+        <image:image>
+            <image:loc><?php echo htmlspecialchars($img['loc'], ENT_XML1, 'UTF-8'); ?></image:loc>
+            <image:title><?php echo htmlspecialchars($img['title'], ENT_XML1, 'UTF-8'); ?></image:title>
+        </image:image>
+<?php endforeach; ?>
+<?php endif; ?>
     </url>
 <?php endforeach; ?>
 </urlset>
