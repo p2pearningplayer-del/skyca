@@ -90,11 +90,11 @@ require dirname(__DIR__) . '/includes/header.php';
         <h2>7. Contact Information for Privacy Requests</h2>
         <p>If you have any questions about this Privacy Policy or wish to exercise your data rights, please contact:</p>
         <ul>
-            <li><strong>Company:</strong> <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></li>
+            <li><strong>Company:</strong> <?php echo skyca_e(COMPANY_LEGAL_NAME); ?> (CIN: <?php echo skyca_e($settings['company_cin'] ?: 'U62013AS2026PTC030738'); ?>)</li>
             <li><strong>Email:</strong> <a href="mailto:<?php echo skyca_e($settings['business_email']); ?>"><?php echo skyca_e($settings['business_email']); ?></a></li>
             <li><strong>Phone:</strong> <a href="tel:<?php echo skyca_e($settings['business_phone_raw']); ?>"><?php echo skyca_e($settings['business_phone']); ?></a></li>
             <?php if (!empty($settings['company_address'])): ?>
-            <li><strong>Address:</strong> <?php echo skyca_e($settings['company_address']); ?></li>
+            <li><strong>Registered Office Address:</strong> <?php echo skyca_e($settings['company_address']); ?><?php if (!empty($settings['company_city'])): ?>, <?php echo skyca_e($settings['company_city']); ?><?php endif; ?><?php if (!empty($settings['company_state'])): ?>, <?php echo skyca_e($settings['company_state']); ?><?php endif; ?><?php if (!empty($settings['company_postal_code'])): ?> &ndash; <?php echo skyca_e($settings['company_postal_code']); ?>, India<?php endif; ?></li>
             <?php endif; ?>
         </ul>
     </div>

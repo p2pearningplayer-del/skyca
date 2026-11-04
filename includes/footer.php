@@ -63,19 +63,19 @@ $year        = date('Y');
                         </li>
                         <?php if (!empty($settings['company_address'])): ?>
                             <li>
-                                <span class="footer-contact-label">Address:</span>
+                                <span class="footer-contact-label">Registered Office:</span>
                                 <span class="footer-contact-text">
                                     <?php echo skyca_e($settings['company_address']); ?>
                                     <?php if (!empty($settings['company_city'])): ?>, <?php echo skyca_e($settings['company_city']); ?><?php endif; ?>
                                     <?php if (!empty($settings['company_state'])): ?>, <?php echo skyca_e($settings['company_state']); ?><?php endif; ?>
-                                    <?php if (!empty($settings['company_postal_code'])): ?> - <?php echo skyca_e($settings['company_postal_code']); ?><?php endif; ?>
+                                    <?php if (!empty($settings['company_postal_code'])): ?> &ndash; <?php echo skyca_e($settings['company_postal_code']); ?>, India<?php endif; ?>
                                 </span>
                             </li>
                         <?php endif; ?>
                         <?php if (!empty($settings['company_cin'])): ?>
                             <li>
                                 <span class="footer-contact-label">CIN:</span>
-                                <span class="footer-contact-text"><?php echo skyca_e($settings['company_cin']); ?></span>
+                                <span class="footer-contact-text"><?php echo skyca_e($settings['company_cin']); ?> (<?php echo skyca_e($settings['company_roc'] ?? 'RoC Guwahati'); ?>)</span>
                             </li>
                         <?php endif; ?>
                         <?php if (!empty($settings['company_gstin'])): ?>

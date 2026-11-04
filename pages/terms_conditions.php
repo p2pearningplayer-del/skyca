@@ -82,11 +82,12 @@ require dirname(__DIR__) . '/includes/header.php';
             To the fullest extent permitted by applicable law, <strong><?php echo skyca_e(COMPANY_LEGAL_NAME); ?></strong> shall not be liable for any indirect, incidental, or consequential damages arising out of your access to or inability to use this informational website.
         </p>
 
-        <h2>7. Governing Law &amp; Contact</h2>
+        <h2>7. Governing Law &amp; Registered Office Contact</h2>
         <p>
-            These website terms are governed by the laws of India.<em>[Note for Legal Review: Specify the exact city/state courts of exclusive jurisdiction in India once confirmed by company counsel.]</em>
+            These website terms are governed by the laws of India, under the jurisdiction of the competent courts in Assam, India (Registrar of Companies: <?php echo skyca_e($settings['company_roc'] ?: 'RoC Guwahati'); ?>; CIN: <code><?php echo skyca_e($settings['company_cin'] ?: 'U62013AS2026PTC030738'); ?></code>).
         </p>
         <p>
+            <strong>Registered Office:</strong> <?php echo skyca_e($settings['company_address']); ?><?php if (!empty($settings['company_city'])): ?>, <?php echo skyca_e($settings['company_city']); ?><?php endif; ?><?php if (!empty($settings['company_state'])): ?>, <?php echo skyca_e($settings['company_state']); ?><?php endif; ?><?php if (!empty($settings['company_postal_code'])): ?> &ndash; <?php echo skyca_e($settings['company_postal_code']); ?>, India<?php endif; ?>.<br>
             For questions regarding these Terms and Conditions, contact us at <a href="mailto:<?php echo skyca_e($settings['business_email']); ?>"><?php echo skyca_e($settings['business_email']); ?></a> or call <a href="tel:<?php echo skyca_e($settings['business_phone_raw']); ?>"><?php echo skyca_e($settings['business_phone']); ?></a>.
         </p>
     </div>

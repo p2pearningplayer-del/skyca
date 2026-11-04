@@ -73,18 +73,73 @@ require dirname(__DIR__) . '/includes/header.php';
                     </picture>
                 </div>
 
-                <!-- Verified Corporate Information Block (Supports Editable Optional Fields) -->
+                <!-- Verified Corporate Information Block (Official MCA / RoC Details) -->
                 <div class="verified-corp-table-wrap">
                     <h3 class="corp-table-title">Verified Corporate Information</h3>
                     <dl class="corp-info-dl">
                         <div class="corp-info-row">
-                            <dt>Legal Entity Name</dt>
+                            <dt>Company Name</dt>
                             <dd><?php echo skyca_e(COMPANY_LEGAL_NAME); ?></dd>
                         </div>
+                        <?php if (!empty($settings['company_cin'])): ?>
                         <div class="corp-info-row">
-                            <dt>Primary Industry</dt>
-                            <dd>Information Technology &amp; Software Development</dd>
+                            <dt>CIN</dt>
+                            <dd><code><?php echo skyca_e($settings['company_cin']); ?></code></dd>
                         </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_incorporation_date'])): ?>
+                        <div class="corp-info-row">
+                            <dt>Date of Incorporation</dt>
+                            <dd><?php echo skyca_e($settings['company_incorporation_date']); ?></dd>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_status'])): ?>
+                        <div class="corp-info-row">
+                            <dt>Company Status</dt>
+                            <dd><span class="status-pill status-converted"><?php echo skyca_e($settings['company_status']); ?></span></dd>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_class'])): ?>
+                        <div class="corp-info-row">
+                            <dt>Class / Category</dt>
+                            <dd><?php echo skyca_e($settings['company_class']); ?></dd>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_roc'])): ?>
+                        <div class="corp-info-row">
+                            <dt>Registrar of Companies</dt>
+                            <dd><?php echo skyca_e($settings['company_roc']); ?></dd>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_authorized_capital'])): ?>
+                        <div class="corp-info-row">
+                            <dt>Authorized Share Capital</dt>
+                            <dd><?php echo skyca_e($settings['company_authorized_capital']); ?></dd>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_paidup_capital'])): ?>
+                        <div class="corp-info-row">
+                            <dt>Paid-up Capital</dt>
+                            <dd><?php echo skyca_e($settings['company_paidup_capital']); ?></dd>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_address'])): ?>
+                        <div class="corp-info-row">
+                            <dt>Registered Office Address</dt>
+                            <dd>
+                                <?php echo skyca_e($settings['company_address']); ?>
+                                <?php if (!empty($settings['company_city'])): ?>, <?php echo skyca_e($settings['company_city']); ?><?php endif; ?>
+                                <?php if (!empty($settings['company_state'])): ?>, <?php echo skyca_e($settings['company_state']); ?><?php endif; ?>
+                                <?php if (!empty($settings['company_postal_code'])): ?> &ndash; <?php echo skyca_e($settings['company_postal_code']); ?>, India<?php endif; ?>
+                            </dd>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($settings['company_gstin'])): ?>
+                        <div class="corp-info-row">
+                            <dt>GSTIN</dt>
+                            <dd><?php echo skyca_e($settings['company_gstin']); ?></dd>
+                        </div>
+                        <?php endif; ?>
                         <div class="corp-info-row">
                             <dt>Official Website</dt>
                             <dd><a href="<?php echo skyca_e(SITE_URL); ?>"><?php echo skyca_e(SITE_URL); ?></a></dd>
@@ -97,35 +152,6 @@ require dirname(__DIR__) . '/includes/header.php';
                             <dt>Business Phone</dt>
                             <dd><a href="tel:<?php echo skyca_e($settings['business_phone_raw']); ?>"><?php echo skyca_e($settings['business_phone']); ?></a></dd>
                         </div>
-                        <?php if (!empty($settings['company_working_hours'])): ?>
-                        <div class="corp-info-row">
-                            <dt>Consultation Hours</dt>
-                            <dd><?php echo skyca_e($settings['company_working_hours']); ?></dd>
-                        </div>
-                        <?php endif; ?>
-                        <?php if (!empty($settings['company_address'])): ?>
-                        <div class="corp-info-row">
-                            <dt>Registered Address</dt>
-                            <dd>
-                                <?php echo skyca_e($settings['company_address']); ?>
-                                <?php if (!empty($settings['company_city'])): ?>, <?php echo skyca_e($settings['company_city']); ?><?php endif; ?>
-                                <?php if (!empty($settings['company_state'])): ?>, <?php echo skyca_e($settings['company_state']); ?><?php endif; ?>
-                                <?php if (!empty($settings['company_postal_code'])): ?> - <?php echo skyca_e($settings['company_postal_code']); ?><?php endif; ?>
-                            </dd>
-                        </div>
-                        <?php endif; ?>
-                        <?php if (!empty($settings['company_cin'])): ?>
-                        <div class="corp-info-row">
-                            <dt>CIN</dt>
-                            <dd><?php echo skyca_e($settings['company_cin']); ?></dd>
-                        </div>
-                        <?php endif; ?>
-                        <?php if (!empty($settings['company_gstin'])): ?>
-                        <div class="corp-info-row">
-                            <dt>GSTIN</dt>
-                            <dd><?php echo skyca_e($settings['company_gstin']); ?></dd>
-                        </div>
-                        <?php endif; ?>
                     </dl>
                 </div>
             </div>

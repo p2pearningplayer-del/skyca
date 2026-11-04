@@ -146,6 +146,12 @@ function skyca_render_seo_head(array $pageMeta = []): void
         'name'          => COMPANY_LEGAL_NAME,
         'legalName'     => COMPANY_LEGAL_NAME,
         'alternateName' => COMPANY_BRAND_NAME,
+        'foundingDate'  => '2026-06-30',
+        'identifier'    => [
+            '@type'      => 'PropertyValue',
+            'propertyID' => 'CIN',
+            'value'      => $settings['company_cin'] ?: 'U62013AS2026PTC030738',
+        ],
         'slogan'        => 'Technology Solutions That Move Your Business Forward.',
         'description'   => $defaultHomeDesc,
         'url'           => SITE_URL . '/',

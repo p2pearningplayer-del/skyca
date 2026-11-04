@@ -97,20 +97,23 @@ require dirname(__DIR__) . '/includes/header.php';
                             </div>
                         </div>
 
-                        <!-- Optional Verified Office Address (if configured) -->
+                        <!-- Verified Registered Office Address & CIN -->
                         <?php if (!empty($settings['company_address'])): ?>
                         <div class="contact-channel-item">
                             <div class="cc-icon">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             </div>
                             <div class="cc-body">
-                                <span class="cc-label">Office Address</span>
-                                <span class="cc-value-text">
+                                <span class="cc-label">Registered Office Address</span>
+                                <span class="cc-value-text" style="display:block;font-weight:600;color:var(--text-heading);margin:2px 0;">
                                     <?php echo skyca_e($settings['company_address']); ?>
                                     <?php if (!empty($settings['company_city'])): ?>, <?php echo skyca_e($settings['company_city']); ?><?php endif; ?>
                                     <?php if (!empty($settings['company_state'])): ?>, <?php echo skyca_e($settings['company_state']); ?><?php endif; ?>
-                                    <?php if (!empty($settings['company_postal_code'])): ?> - <?php echo skyca_e($settings['company_postal_code']); ?><?php endif; ?>
+                                    <?php if (!empty($settings['company_postal_code'])): ?> &ndash; <?php echo skyca_e($settings['company_postal_code']); ?>, India<?php endif; ?>
                                 </span>
+                                <?php if (!empty($settings['company_cin'])): ?>
+                                    <span class="cc-note">CIN: <?php echo skyca_e($settings['company_cin']); ?> (<?php echo skyca_e($settings['company_roc'] ?? 'RoC Guwahati'); ?>)</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <?php endif; ?>

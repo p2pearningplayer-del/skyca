@@ -17,8 +17,16 @@ $allServices = skyca_get_all_services();
 echo "# " . COMPANY_LEGAL_NAME . " (" . SITE_URL . ")\n\n";
 echo "> Technology Solutions That Move Your Business Forward. From custom software and web development to cloud solutions, AI, cybersecurity, and digital growth, Skyca Digital Private Limited helps businesses turn technology into measurable progress.\n\n";
 
-echo "## Official Corporate Contact Information\n";
+echo "## Official Corporate Contact & Registration Information\n";
 echo "- **Company Legal Name:** " . COMPANY_LEGAL_NAME . "\n";
+echo "- **Corporate Identification Number (CIN):** " . ($settings['company_cin'] ?: 'U62013AS2026PTC030738') . "\n";
+echo "- **Date of Incorporation:** " . ($settings['company_incorporation_date'] ?: 'June 30, 2026') . "\n";
+echo "- **Company Status:** " . ($settings['company_status'] ?: 'Active') . "\n";
+echo "- **Class / Category:** " . ($settings['company_class'] ?: 'Private Company Limited by Shares (Non-government)') . "\n";
+echo "- **Registrar of Companies (RoC):** " . ($settings['company_roc'] ?: 'RoC Guwahati') . "\n";
+echo "- **Authorized Share Capital:** " . ($settings['company_authorized_capital'] ?: '₹1,00,000') . "\n";
+echo "- **Paid-up Capital:** " . ($settings['company_paidup_capital'] ?: '₹1,00,000') . "\n";
+echo "- **Registered Office Address:** House No. 143, Dhakshin Chenimari, Kalgachia, Barpeta, Assam – 781319, India\n";
 echo "- **Official Website:** " . SITE_URL . "\n";
 echo "- **Business Email:** " . $settings['business_email'] . "\n";
 echo "- **Business Phone:** " . $settings['business_phone'] . "\n";
