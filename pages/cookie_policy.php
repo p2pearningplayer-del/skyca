@@ -30,18 +30,39 @@ require dirname(__DIR__) . '/includes/header.php';
     <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
-        <div class="page-hero-content">
-            <span class="section-eyebrow eyebrow-light">Transparency &amp; Consent</span>
-            <h1 class="page-hero-title">Cookie Policy</h1>
-            <p class="page-hero-subtitle">
-                How <?php echo skyca_e(COMPANY_LEGAL_NAME); ?> uses cookies and browser storage on <?php echo skyca_e(SITE_URL); ?>.
-            </p>
+        <div class="inner-hero-split">
+            <div class="page-hero-content">
+                <span class="section-eyebrow eyebrow-light">Transparency &amp; Consent</span>
+                <h1 class="page-hero-title">Cookie Policy</h1>
+                <p class="page-hero-subtitle">
+                    How <?php echo skyca_e(COMPANY_LEGAL_NAME); ?> uses cookies and browser storage on <?php echo skyca_e(SITE_URL); ?>.
+                </p>
+            </div>
+            <div class="inner-hero-visual scene-3d" aria-hidden="true">
+                <div class="glass-hero-vector-card card-3d-surface">
+                    <div class="ghv-header">
+                        <span class="ghv-dot dot-teal"></span>
+                        <span class="ghv-dot dot-blue"></span>
+                        <span class="ghv-dot dot-gold"></span>
+                        <span class="ghv-title">CONSENT_MANAGER // GRANULAR</span>
+                    </div>
+                    <svg viewBox="0 0 400 150" class="ghv-svg" role="img" aria-label="Cookie Consent Controls">
+                        <rect x="20" y="20" width="360" height="110" rx="14" fill="rgba(15,23,42,0.85)" stroke="#f59e0b" stroke-width="1.4"/>
+                        <rect x="44" y="46" width="48" height="24" rx="12" fill="rgba(20,184,166,0.3)" stroke="#2dd4bf" stroke-width="1.6"/>
+                        <circle cx="78" cy="58" r="8" fill="#2dd4bf"/>
+                        <rect x="44" y="82" width="48" height="24" rx="12" fill="rgba(5,141,240,0.3)" stroke="#38bdf8" stroke-width="1.6"/>
+                        <circle cx="78" cy="94" r="8" fill="#38bdf8"/>
+                        <text x="114" y="62" fill="#ffffff" font-family="Inter, sans-serif" font-size="11.5" font-weight="800">STRICTLY NECESSARY CSRF &amp; SESSION</text>
+                        <text x="114" y="98" fill="#fde68a" font-family="Inter, sans-serif" font-size="11.5" font-weight="800">CONSENT-AWARE GA4 &amp; ADS ATTRIBUTION</text>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="section bg-white">
-    <div class="container container-narrow legal-document">
+    <div class="container container-narrow legal-document legal-document-card">
         <div class="legal-review-banner" role="note">
             <strong>Professional Legal Review Notice:</strong>
             <span>This Cookie Policy outlines the technical cookies and consent controls implemented on <?php echo skyca_e(SITE_URL); ?>. Please have your legal advisor review this document alongside any regional e-privacy requirements if targeting international jurisdictions.</span>

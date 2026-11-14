@@ -30,18 +30,38 @@ require dirname(__DIR__) . '/includes/header.php';
     <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
-        <div class="page-hero-content">
-            <span class="section-eyebrow eyebrow-light">Legal &amp; Data Protection</span>
-            <h1 class="page-hero-title">Privacy Policy</h1>
-            <p class="page-hero-subtitle">
-                How <?php echo skyca_e(COMPANY_LEGAL_NAME); ?> collects, uses, stores, and safeguards information submitted through <?php echo skyca_e(SITE_URL); ?>.
-            </p>
+        <div class="inner-hero-split">
+            <div class="page-hero-content">
+                <span class="section-eyebrow eyebrow-light">Legal &amp; Data Protection</span>
+                <h1 class="page-hero-title">Privacy Policy</h1>
+                <p class="page-hero-subtitle">
+                    How <?php echo skyca_e(COMPANY_LEGAL_NAME); ?> collects, uses, stores, and safeguards information submitted through <?php echo skyca_e(SITE_URL); ?>.
+                </p>
+            </div>
+            <div class="inner-hero-visual scene-3d" aria-hidden="true">
+                <div class="glass-hero-vector-card card-3d-surface">
+                    <div class="ghv-header">
+                        <span class="ghv-dot dot-teal"></span>
+                        <span class="ghv-dot dot-blue"></span>
+                        <span class="ghv-dot dot-gold"></span>
+                        <span class="ghv-title">DATA_PRIVACY_SHIELD // TLS_1.3</span>
+                    </div>
+                    <svg viewBox="0 0 400 150" class="ghv-svg" role="img" aria-label="Privacy and Security Shield">
+                        <rect x="20" y="20" width="360" height="110" rx="14" fill="rgba(15,23,42,0.85)" stroke="#2dd4bf" stroke-width="1.4"/>
+                        <path d="M75 42 L105 54 V80 C105 98 92 110 75 116 C58 110 45 98 45 80 V54 Z" fill="rgba(20,184,166,0.22)" stroke="#2dd4bf" stroke-width="2"/>
+                        <polyline points="65 78 73 86 88 69" fill="none" stroke="#5eead4" stroke-width="2.5"/>
+                        <text x="130" y="58" fill="#ffffff" font-family="Inter, sans-serif" font-size="12" font-weight="800">ZERO DATA BROKER SHARING</text>
+                        <text x="130" y="78" fill="#7dd3fc" font-family="Inter, sans-serif" font-size="10.5" font-weight="600">Parameterized SQL &amp; HTTPS Encryption</text>
+                        <text x="130" y="98" fill="#fde68a" font-family="Inter, sans-serif" font-size="10" font-weight="700">CIN: U62013AS2026PTC030738</text>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="section bg-white">
-    <div class="container container-narrow legal-document">
+    <div class="container container-narrow legal-document legal-document-card">
         <div class="legal-review-banner" role="note">
             <strong>Professional Legal Review Notice:</strong>
             <span>This Privacy Policy template is structured for the operational practices of <strong><?php echo skyca_e(COMPANY_LEGAL_NAME); ?></strong>. Specific statutory clauses, retention schedules, and jurisdictional disclosures (such as under the Digital Personal Data Protection Act, 2023 in India or international privacy frameworks) should be reviewed and finalized by a qualified legal professional prior to formal compliance reliance.</span>

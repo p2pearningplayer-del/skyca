@@ -20,9 +20,12 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<section class="section bg-slate not-found-section">
+<section class="section bg-slate not-found-section hero-3d-stage">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container container-narrow text-center">
-        <div class="not-found-card">
+        <div class="not-found-card card-3d-surface">
             <span class="not-found-code">404</span>
             <h1 class="not-found-title">Page Not Found</h1>
             <p class="not-found-desc">

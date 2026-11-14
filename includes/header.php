@@ -22,7 +22,7 @@ $currentPath = $pageMeta['path'] ?? '/';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="theme-color" content="#033eb6">
+    <meta name="theme-color" content="#040814">
     <?php skyca_render_seo_head($pageMeta ?? []); ?>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">

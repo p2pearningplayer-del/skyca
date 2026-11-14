@@ -30,18 +30,40 @@ require dirname(__DIR__) . '/includes/header.php';
     <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
-        <div class="page-hero-content">
-            <span class="section-eyebrow eyebrow-light">Website Governance</span>
-            <h1 class="page-hero-title">Terms and Conditions</h1>
-            <p class="page-hero-subtitle">
-                Terms governing access to and use of the <?php echo skyca_e(COMPANY_LEGAL_NAME); ?> website (<?php echo skyca_e(SITE_URL); ?>).
-            </p>
+        <div class="inner-hero-split">
+            <div class="page-hero-content">
+                <span class="section-eyebrow eyebrow-light">Website Governance</span>
+                <h1 class="page-hero-title">Terms and Conditions</h1>
+                <p class="page-hero-subtitle">
+                    Terms governing access to and use of the <?php echo skyca_e(COMPANY_LEGAL_NAME); ?> website (<?php echo skyca_e(SITE_URL); ?>).
+                </p>
+            </div>
+            <div class="inner-hero-visual scene-3d" aria-hidden="true">
+                <div class="glass-hero-vector-card card-3d-surface">
+                    <div class="ghv-header">
+                        <span class="ghv-dot dot-teal"></span>
+                        <span class="ghv-dot dot-blue"></span>
+                        <span class="ghv-dot dot-gold"></span>
+                        <span class="ghv-title">CORPORATE_TERMS // ROC_GUWAHATI</span>
+                    </div>
+                    <svg viewBox="0 0 400 150" class="ghv-svg" role="img" aria-label="Corporate Governance Terms">
+                        <rect x="20" y="20" width="360" height="110" rx="14" fill="rgba(15,23,42,0.85)" stroke="#38bdf8" stroke-width="1.4"/>
+                        <rect x="44" y="42" width="56" height="66" rx="8" fill="rgba(5,141,240,0.22)" stroke="#38bdf8" stroke-width="1.8"/>
+                        <line x1="56" y1="60" x2="88" y2="60" stroke="#7dd3fc" stroke-width="2"/>
+                        <line x1="56" y1="74" x2="88" y2="74" stroke="#2dd4bf" stroke-width="2"/>
+                        <line x1="56" y1="88" x2="78" y2="88" stroke="#fbbf24" stroke-width="2"/>
+                        <text x="122" y="58" fill="#ffffff" font-family="Inter, sans-serif" font-size="12" font-weight="800">TRANSPARENT ENGAGEMENT TERMS</text>
+                        <text x="122" y="78" fill="#99f6e4" font-family="Inter, sans-serif" font-size="10.5" font-weight="600">Milestone-Based SOW &amp; IP Handover</text>
+                        <text x="122" y="98" fill="#fde68a" font-family="Inter, sans-serif" font-size="10" font-weight="700">Jurisdiction: Assam, India</text>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="section bg-white">
-    <div class="container container-narrow legal-document">
+    <div class="container container-narrow legal-document legal-document-card">
         <div class="legal-review-banner" role="note">
             <strong>Professional Legal Review Notice:</strong>
             <span>These Website Terms and Conditions are provided for general corporate governance of <strong><?php echo skyca_e(COMPANY_LEGAL_NAME); ?></strong>. Formal client engagements, software deliverables, warranties, and dispute resolution clauses should be governed by a written Master Services Agreement (MSA) or Statement of Work (SOW) reviewed by qualified legal counsel.</span>

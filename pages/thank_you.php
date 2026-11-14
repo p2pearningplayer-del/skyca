@@ -61,9 +61,12 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<section class="section bg-slate thank-you-section">
+<section class="section bg-slate thank-you-section hero-3d-stage">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container container-narrow">
-        <div class="thank-you-card">
+        <div class="thank-you-card card-3d-surface">
             <div class="ty-check-circle" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>

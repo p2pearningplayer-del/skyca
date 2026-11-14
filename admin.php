@@ -114,10 +114,16 @@ if (!skyca_is_admin_logged_in()) {
         <meta name="robots" content="noindex, nofollow">
         <title>Admin &amp; Ads CRM Login | <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="<?php echo skyca_e(skyca_asset('assets/css/styles.css')); ?>">
     </head>
     <body class="admin-login-body">
-        <main class="admin-login-wrapper">
+        <main class="admin-login-wrapper hero-3d-stage">
+            <div class="hero-bg-grid" aria-hidden="true"></div>
+            <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+            <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
             <div class="admin-login-card card-3d-surface">
                 <div class="admin-login-brand">
                     <a href="/">
@@ -371,6 +377,9 @@ $leadsList = $leadsStmt->fetchAll();
     <meta name="robots" content="noindex, nofollow">
     <title>Ads &amp; Sales CRM Dashboard | <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo skyca_e(skyca_asset('assets/css/styles.css')); ?>">
 </head>
 <body class="admin-body" data-csrf="<?php echo skyca_e($csrfToken); ?>">

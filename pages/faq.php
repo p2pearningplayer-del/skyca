@@ -92,12 +92,44 @@ require dirname(__DIR__) . '/includes/header.php';
     <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
-        <div class="page-hero-content">
-            <span class="section-eyebrow eyebrow-light">Knowledge Base</span>
-            <h1 class="page-hero-title">Frequently Asked Questions</h1>
-            <p class="page-hero-subtitle">
-                Everything you need to know about engaging Skyca Digital Private Limited for software engineering, web &amp; mobile development, cloud architecture, AI, cybersecurity, and digital growth.
-            </p>
+        <div class="inner-hero-split">
+            <div class="page-hero-content">
+                <span class="section-eyebrow eyebrow-light">Knowledge Base &amp; Technical Q&amp;A</span>
+                <h1 class="page-hero-title">Frequently Asked Questions</h1>
+                <p class="page-hero-subtitle">
+                    Everything you need to know about engaging Skyca Digital Private Limited for software engineering, web &amp; mobile development, cloud architecture, AI, cybersecurity, and digital growth.
+                </p>
+            </div>
+
+            <div class="inner-hero-visual scene-3d" aria-hidden="true">
+                <div class="glass-hero-vector-card card-3d-surface">
+                    <div class="ghv-header">
+                        <span class="ghv-dot dot-teal"></span>
+                        <span class="ghv-dot dot-blue"></span>
+                        <span class="ghv-dot dot-gold"></span>
+                        <span class="ghv-title">SKYCA_KNOWLEDGE_BASE // VERIFIED</span>
+                    </div>
+                    <svg viewBox="0 0 420 175" class="ghv-svg" role="img" aria-label="Knowledge Base Architecture">
+                        <defs>
+                            <linearGradient id="faqCardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#058df0" stop-opacity="0.28"/>
+                                <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.16"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="18" y="18" width="384" height="42" rx="10" fill="url(#faqCardGrad)" stroke="#38bdf8" stroke-width="1.3"/>
+                        <text x="34" y="43" fill="#ffffff" font-family="Inter, sans-serif" font-size="11" font-weight="800">01 // ARCHITECTURE, SOURCE CODE OWNERSHIP &amp; IP</text>
+                        <circle cx="380" cy="39" r="6" fill="#2dd4bf"/>
+
+                        <rect x="18" y="70" width="384" height="42" rx="10" fill="rgba(15,23,42,0.85)" stroke="#2dd4bf" stroke-width="1.3"/>
+                        <text x="34" y="95" fill="#99f6e4" font-family="Inter, sans-serif" font-size="11" font-weight="800">02 // OWASP SECURITY, TLS 1.3 &amp; DATA PRIVACY</text>
+                        <circle cx="380" cy="91" r="6" fill="#38bdf8"/>
+
+                        <rect x="18" y="122" width="384" height="42" rx="10" fill="rgba(15,23,42,0.85)" stroke="#f59e0b" stroke-width="1.3"/>
+                        <text x="34" y="147" fill="#fde68a" font-family="Inter, sans-serif" font-size="11" font-weight="800">03 // TRANSPARENT MILESTONES &amp; SLA SUPPORT</text>
+                        <circle cx="380" cy="143" r="6" fill="#fbbf24"/>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 </section>
