@@ -127,7 +127,7 @@ if (!skyca_is_admin_logged_in()) {
             <div class="admin-login-card card-3d-surface">
                 <div class="admin-login-brand">
                     <a href="/">
-                        <img src="/assets/images/skyca-logo-horizontal.png" alt="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?>" width="240" height="65">
+                        <img src="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-horizontal.png')); ?>" alt="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?>" width="240" height="65">
                     </a>
                     <h1>Ads &amp; Lead CRM Portal</h1>
                     <p>Authorized Administrator Access Only</p>
@@ -388,7 +388,7 @@ $leadsList = $leadsStmt->fetchAll();
         <div class="container admin-header-inner">
             <div class="admin-brand">
                 <a href="/admin" class="admin-logo-link">
-                    <img src="/assets/images/skyca-logo-horizontal.png" alt="Skyca Digital" width="190" height="51">
+                    <img src="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-horizontal.png')); ?>" alt="Skyca Digital" width="190" height="51">
                 </a>
                 <span class="admin-portal-badge">Ads &amp; Lead CRM</span>
             </div>

@@ -34,9 +34,9 @@ $year        = date('Y');
                 <div class="footer-col footer-brand-col">
                     <a href="/" class="footer-logo-badge" aria-label="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?> Home">
                         <picture>
-                            <source srcset="/assets/images/skyca-logo-horizontal.webp" type="image/webp">
+                            <source srcset="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-horizontal.webp')); ?>" type="image/webp">
                             <img
-                                src="/assets/images/skyca-logo-horizontal.png"
+                                src="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-horizontal.png')); ?>"
                                 alt="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?> Official Logo"
                                 width="260"
                                 height="70"

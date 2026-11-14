@@ -97,9 +97,9 @@ require dirname(__DIR__) . '/includes/header.php';
             <div class="about-identity-card">
                 <div class="official-brand-showcase">
                     <picture>
-                        <source srcset="/assets/images/skyca-logo-full.webp" type="image/webp">
+                        <source srcset="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-full.webp')); ?>" type="image/webp">
                         <img
-                            src="/assets/images/skyca-logo-full.png"
+                            src="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-full.png')); ?>"
                             alt="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?> Official Logo"
                             width="280"
                             height="250"

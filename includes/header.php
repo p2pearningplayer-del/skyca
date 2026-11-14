@@ -63,9 +63,9 @@ $currentPath = $pageMeta['path'] ?? '/';
             <!-- Official Brand Logo -->
             <a href="/" class="brand-logo-link" aria-label="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?> Home">
                 <picture>
-                    <source srcset="/assets/images/skyca-logo-horizontal.webp" type="image/webp">
+                    <source srcset="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-horizontal.webp')); ?>" type="image/webp">
                     <img
-                        src="/assets/images/skyca-logo-horizontal.png"
+                        src="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-horizontal.png')); ?>"
                         alt="<?php echo skyca_e(COMPANY_LEGAL_NAME); ?> Official Logo"
                         width="320"
                         height="86"

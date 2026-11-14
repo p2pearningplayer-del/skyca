@@ -320,8 +320,8 @@ require dirname(__DIR__) . '/includes/header.php';
 
                 <div class="why-brand-box">
                     <picture>
-                        <source srcset="/assets/images/skyca-logo-full.webp" type="image/webp">
-                        <img src="/assets/images/skyca-logo-full.png" alt="Skyca Digital Private Limited Official Logo" width="180" height="160" loading="lazy" class="why-logo-img">
+                        <source srcset="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-full.webp')); ?>" type="image/webp">
+                        <img src="<?php echo skyca_e(skyca_asset('assets/images/skyca-logo-full.png')); ?>" alt="Skyca Digital Private Limited Official Logo" width="180" height="160" loading="lazy" class="why-logo-img">
                     </picture>
                     <div class="why-brand-text">
                         <h3>Transparent Corporate Partnership</h3>
