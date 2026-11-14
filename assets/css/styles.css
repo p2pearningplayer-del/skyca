@@ -3521,3 +3521,479 @@ ul, ol {
     }
 }
 
+/* ============================================================================
+   ULTRA-PREMIUM LUXURY DIGITAL AGENCY UI/UX DESIGN SYSTEM
+   Palette: Deep Midnight Obsidian (#040814 - #0A1329), Electric Neon Blue (#058DF0),
+            Luminous Teal (#14B8A6 / #2DD4BF), Executive Champagne Gold (#F59E0B / #FBBF24),
+            & Clean Alabaster Whitespace (#FFFFFF / #F4F7FB)
+   ============================================================================ */
+
+:root {
+    --midnight-950: #040814;
+    --midnight-900: #071024;
+    --midnight-800: #0c1938;
+    --accent-neon-blue: #00d2ff;
+    --accent-teal: #14b8a6;
+    --accent-teal-light: #2dd4bf;
+    --accent-gold: #f59e0b;
+    --accent-gold-light: #fbbf24;
+    --shadow-luxury: 0 24px 54px -12px rgba(7, 16, 36, 0.09), 0 6px 18px -4px rgba(3, 62, 182, 0.05);
+    --shadow-luxury-hover: 0 32px 68px -12px rgba(3, 62, 182, 0.16), 0 12px 28px -6px rgba(20, 184, 166, 0.10);
+    --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --- 1. Refined Typography & Generous Agency Spacing --- */
+body.site-body {
+    background-color: #ffffff;
+    color: #334155;
+    letter-spacing: -0.005em;
+}
+
+h1, h2, h3, h4 {
+    letter-spacing: -0.028em;
+}
+
+.section {
+    padding: 96px 0;
+    position: relative;
+}
+
+.bg-slate {
+    background:
+        radial-gradient(900px circle at 8% 12%, rgba(5, 141, 240, 0.045), transparent 60%),
+        radial-gradient(800px circle at 92% 88%, rgba(20, 184, 166, 0.045), transparent 60%),
+        linear-gradient(180deg, #f6f9fc 0%, #f1f5f9 100%);
+    border-top: 1px solid rgba(203, 213, 225, 0.65);
+    border-bottom: 1px solid rgba(203, 213, 225, 0.65);
+}
+
+.section-eyebrow {
+    background: linear-gradient(135deg, rgba(3, 62, 182, 0.08) 0%, rgba(20, 184, 166, 0.08) 100%);
+    border: 1px solid rgba(5, 141, 240, 0.24);
+    color: #033eb6;
+    padding: 6px 16px;
+    font-size: 0.76rem;
+    letter-spacing: 0.1em;
+    box-shadow: 0 2px 10px rgba(3, 62, 182, 0.06);
+}
+
+.eyebrow-light {
+    background: linear-gradient(135deg, rgba(5, 141, 240, 0.2) 0%, rgba(20, 184, 166, 0.18) 100%);
+    border: 1px solid rgba(45, 212, 191, 0.38);
+    color: #5eead4;
+    box-shadow: 0 4px 16px rgba(20, 184, 166, 0.15);
+}
+
+/* --- 2. Topbar & Frosted Glassmorphic Header --- */
+.topbar {
+    background: linear-gradient(90deg, #040814 0%, #09152e 50%, #040814 100%);
+    border-bottom: 1px solid rgba(56, 189, 248, 0.14);
+    padding: 9px 0;
+}
+
+.topbar-badge {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(5, 141, 240, 0.2) 100%);
+    border: 1px solid rgba(251, 191, 36, 0.38);
+    color: #fde68a;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.site-header {
+    background: rgba(255, 255, 255, 0.84);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+    box-shadow: 0 8px 30px -10px rgba(7, 16, 36, 0.06);
+}
+
+.nav-link {
+    border-radius: 999px;
+    padding: 9px 16px;
+    transition: all 0.22s var(--ease-luxury);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: linear-gradient(135deg, rgba(3, 62, 182, 0.08) 0%, rgba(5, 141, 240, 0.12) 100%);
+    color: var(--brand-primary);
+}
+
+.mega-menu {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(147, 197, 253, 0.45);
+    border-radius: 20px;
+    box-shadow: 0 30px 70px -15px rgba(7, 16, 36, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+}
+
+/* --- 3. Deep Midnight Blue & Glassmorphic Hero Stage --- */
+.hero-section.hero-midnight-luxury {
+    background:
+        radial-gradient(1000px circle at 15% 18%, rgba(5, 141, 240, 0.20) 0%, transparent 55%),
+        radial-gradient(850px circle at 85% 25%, rgba(20, 184, 166, 0.16) 0%, transparent 55%),
+        radial-gradient(650px circle at 70% 88%, rgba(245, 158, 11, 0.11) 0%, transparent 55%),
+        linear-gradient(145deg, #040814 0%, #071228 48%, #0a1936 100%);
+    border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+    padding: 88px 0 104px;
+    color: #f8fafc;
+}
+
+.hero-midnight-luxury .hero-bg-grid {
+    background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 80% 75% at 50% 45%, #000 55%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 75% at 50% 45%, #000 55%, transparent 100%);
+    opacity: 0.85;
+}
+
+.hero-3d-orb-gold {
+    width: 280px;
+    height: 280px;
+    bottom: 8%;
+    right: 22%;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.16) 0%, rgba(20, 184, 166, 0.06) 65%, transparent 100%);
+    animation: float3DOrb 13s ease-in-out infinite alternate;
+}
+
+.hero-midnight-luxury .hero-eyebrow-pill {
+    background: rgba(15, 23, 42, 0.72);
+    border: 1px solid rgba(251, 191, 36, 0.42);
+    color: #fde68a;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.35), 0 0 20px rgba(245, 158, 11, 0.12);
+}
+
+.hero-midnight-luxury .pulse-dot {
+    background-color: #2dd4bf;
+    box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.25), 0 0 12px #2dd4bf;
+}
+
+.hero-midnight-luxury .hero-headline {
+    color: #ffffff;
+    font-size: clamp(2.35rem, 4.2vw, 3.55rem);
+    line-height: 1.12;
+    letter-spacing: -0.032em;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 55%, #7dd3fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 12px 36px rgba(5, 141, 240, 0.18);
+}
+
+.hero-midnight-luxury .hero-subheadline {
+    color: #cbd5e1;
+    font-size: 1.15rem;
+    line-height: 1.72;
+}
+
+/* Luxury Buttons with Neon / Gold / Glassmorphic Depth */
+.btn-primary,
+.btn-3d-primary {
+    background: linear-gradient(135deg, #058df0 0%, #033eb6 55%, #0284c7 100%);
+    background-size: 200% auto;
+    color: #ffffff;
+    border: 1px solid rgba(125, 211, 252, 0.38);
+    box-shadow:
+        0 4px 0 #012575,
+        0 14px 30px -4px rgba(5, 141, 240, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: all 0.28s var(--ease-luxury);
+}
+
+.btn-primary:hover,
+.btn-3d-primary:hover {
+    background-position: right center;
+    transform: translateY(-3px);
+    box-shadow:
+        0 6px 0 #012575,
+        0 20px 38px -4px rgba(5, 141, 240, 0.55),
+        0 0 20px rgba(45, 212, 191, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.hero-midnight-luxury .btn-3d-secondary {
+    background: rgba(255, 255, 255, 0.07);
+    color: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.hero-midnight-luxury .btn-3d-secondary:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: #38bdf8;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px -6px rgba(5, 141, 240, 0.28);
+}
+
+/* Frosted Glass Trust Cards in Hero */
+.hero-midnight-luxury .hero-trust-strip {
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.hero-midnight-luxury .trust-card-3d {
+    background: rgba(15, 23, 42, 0.62);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    padding: 14px 16px;
+    border-radius: 14px;
+}
+
+.hero-midnight-luxury .trust-card-3d:hover {
+    transform: translateY(-4px);
+    border-color: rgba(45, 212, 191, 0.5);
+    box-shadow: 0 18px 36px -8px rgba(5, 141, 240, 0.28), 0 0 0 1px rgba(45, 212, 191, 0.25);
+}
+
+.hero-midnight-luxury .hero-trust-item strong {
+    color: #f8fafc;
+}
+
+.hero-midnight-luxury .hero-trust-item span {
+    color: #94a3b8;
+}
+
+.trust-icon-ring {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.trust-ring-teal {
+    background: rgba(20, 184, 166, 0.16);
+    border: 1px solid rgba(45, 212, 191, 0.35);
+    color: #2dd4bf;
+}
+
+.trust-ring-blue {
+    background: rgba(5, 141, 240, 0.18);
+    border: 1px solid rgba(56, 189, 248, 0.38);
+    color: #38bdf8;
+}
+
+.trust-ring-gold {
+    background: rgba(245, 158, 11, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.38);
+    color: #fbbf24;
+}
+
+/* --- 4. Dark Glassmorphic 3D Hero Architecture Card --- */
+.hero-midnight-luxury .architecture-showcase-card.card-3d-surface {
+    background: linear-gradient(155deg, rgba(15, 28, 58, 0.82) 0%, rgba(7, 14, 32, 0.92) 100%);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1.5px solid rgba(56, 189, 248, 0.28);
+    box-shadow:
+        0 2px 0 0 rgba(56, 189, 248, 0.25),
+        0 30px 70px -15px rgba(0, 0, 0, 0.65),
+        0 0 40px -10px rgba(5, 141, 240, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.hero-midnight-luxury .architecture-showcase-card.card-3d-surface:hover {
+    border-color: rgba(45, 212, 191, 0.55);
+    box-shadow:
+        0 4px 0 0 rgba(45, 212, 191, 0.4),
+        0 38px 80px -12px rgba(5, 141, 240, 0.38),
+        0 0 50px -8px rgba(20, 184, 166, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.hero-midnight-luxury .arch-card-header {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.hero-midnight-luxury .arch-card-title {
+    color: #ffffff;
+}
+
+.hero-midnight-luxury .arch-card-subtitle {
+    color: #94a3b8;
+}
+
+.hero-midnight-luxury .arch-status-badge {
+    background: rgba(20, 184, 166, 0.18);
+    border: 1px solid rgba(45, 212, 191, 0.45);
+    color: #5eead4;
+    box-shadow: 0 0 14px rgba(20, 184, 166, 0.25);
+}
+
+.hero-midnight-luxury .arch-layer-3d {
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.68) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.hero-midnight-luxury .arch-layer-3d:hover {
+    border-color: #38bdf8;
+    background: linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(12, 36, 78, 0.85) 100%);
+    box-shadow: -4px 12px 24px -4px rgba(5, 141, 240, 0.28);
+}
+
+.hero-midnight-luxury .arch-layer-info strong {
+    color: #f8fafc;
+}
+
+.hero-midnight-luxury .arch-layer-info span {
+    color: #94a3b8;
+}
+
+.num-neon-blue {
+    background: linear-gradient(135deg, #058df0 0%, #033eb6 100%);
+    box-shadow: 0 0 14px rgba(5, 141, 240, 0.45);
+}
+
+.num-neon-teal {
+    background: linear-gradient(135deg, #14b8a6 0%, #0284c7 100%);
+    box-shadow: 0 0 14px rgba(20, 184, 166, 0.45);
+}
+
+.num-luxury-gold {
+    background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+}
+
+.hero-midnight-luxury .arch-diagram-box {
+    background: rgba(4, 8, 20, 0.72);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.svg-flow-line {
+    animation: svgDashFlow 1.8s linear infinite;
+}
+
+@keyframes svgDashFlow {
+    to {
+        stroke-dashoffset: -18;
+    }
+}
+
+.hero-midnight-luxury .arch-card-footer {
+    border-top: 1px solid rgba(148, 163, 184, 0.16);
+    color: #94a3b8;
+}
+
+.hero-midnight-luxury .arch-phone-link {
+    color: #fbbf24;
+    font-weight: 800;
+}
+.hero-midnight-luxury .arch-phone-link:hover {
+    color: #fde68a;
+}
+
+/* --- 5. Luxury Service Cards, Why Cards, Process Cards & Capabilities --- */
+.service-card.card-3d-surface,
+.why-feature-card.card-3d-surface,
+.process-step-card.card-3d-surface,
+.cap-group-card.card-3d-surface,
+.problem-card.card-3d-surface,
+.philosophy-card.card-3d-surface {
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+    border: 1px solid rgba(203, 213, 225, 0.75);
+    border-radius: 18px;
+    box-shadow: var(--shadow-luxury);
+    overflow: hidden;
+}
+
+.service-card.card-3d-surface::before,
+.why-feature-card.card-3d-surface::before,
+.process-step-card.card-3d-surface::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #033eb6 0%, #058df0 45%, #14b8a6 78%, #f59e0b 100%);
+    opacity: 0.72;
+    transition: opacity 0.25s ease, height 0.25s ease;
+}
+
+.service-card.card-3d-surface:hover::before,
+.why-feature-card.card-3d-surface:hover::before,
+.process-step-card.card-3d-surface:hover::before {
+    opacity: 1;
+    height: 4px;
+}
+
+.service-card.card-3d-surface:hover,
+.why-feature-card.card-3d-surface:hover,
+.process-step-card.card-3d-surface:hover,
+.cap-group-card.card-3d-surface:hover,
+.problem-card.card-3d-surface:hover,
+.philosophy-card.card-3d-surface:hover {
+    border-color: rgba(5, 141, 240, 0.45);
+    box-shadow: var(--shadow-luxury-hover);
+}
+
+.service-num-badge {
+    background: linear-gradient(135deg, #eff6ff 0%, #f0fdfa 100%);
+    border: 1px solid rgba(5, 141, 240, 0.2);
+    color: var(--brand-primary);
+}
+
+/* --- 6. Midnight Glassmorphic Inner Page Heroes, Industries & Footer --- */
+.page-hero.bg-navy,
+.section.bg-navy {
+    background:
+        radial-gradient(850px circle at 15% 20%, rgba(5, 141, 240, 0.18) 0%, transparent 55%),
+        radial-gradient(750px circle at 85% 80%, rgba(20, 184, 166, 0.14) 0%, transparent 55%),
+        linear-gradient(145deg, #040814 0%, #08132c 52%, #0b1938 100%);
+}
+
+.industry-card.card-3d-surface,
+.service-quick-summary-card.card-3d-surface {
+    background: linear-gradient(155deg, rgba(15, 28, 58, 0.65) 0%, rgba(7, 14, 32, 0.78) 100%);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    border-radius: 18px;
+    box-shadow: 0 20px 44px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.industry-card.card-3d-surface:hover,
+.service-quick-summary-card.card-3d-surface:hover {
+    border-color: rgba(45, 212, 191, 0.55);
+    box-shadow: 0 28px 56px -12px rgba(5, 141, 240, 0.32), 0 0 24px rgba(20, 184, 166, 0.18);
+}
+
+.industry-tag {
+    color: #2dd4bf;
+}
+
+.enquiry-form-card,
+.contact-channels-card,
+.contact-next-steps-card,
+.about-identity-card {
+    border-radius: 22px;
+    border: 1px solid rgba(147, 197, 253, 0.45);
+    box-shadow: 0 28px 64px -16px rgba(7, 16, 36, 0.10), 0 4px 16px -2px rgba(3, 62, 182, 0.05);
+}
+
+.site-footer {
+    background:
+        radial-gradient(900px circle at 80% 10%, rgba(5, 141, 240, 0.12) 0%, transparent 55%),
+        linear-gradient(180deg, #040814 0%, #02050d 100%);
+    border-top: 1px solid rgba(56, 189, 248, 0.16);
+}
+
+.footer-top-cta {
+    background: linear-gradient(135deg, rgba(12, 25, 56, 0.9) 0%, rgba(3, 62, 182, 0.35) 55%, rgba(20, 184, 166, 0.2) 100%);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(56, 189, 248, 0.32);
+    box-shadow: 0 24px 54px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+

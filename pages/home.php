@@ -50,11 +50,12 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<!-- 2. HERO SECTION (PROFESSIONAL 3D SPATIAL STAGE) -->
-<section class="hero-section hero-3d-stage">
+<!-- 2. HERO SECTION (ULTRA-PREMIUM MIDNIGHT 3D & GLASSMORPHIC STAGE) -->
+<section class="hero-section hero-3d-stage hero-midnight-luxury">
     <div class="hero-bg-grid" aria-hidden="true"></div>
     <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
     <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-gold" aria-hidden="true"></div>
     <div class="container hero-container">
         <div class="hero-content">
             <div class="hero-eyebrow-pill badge-3d">
@@ -83,21 +84,27 @@ require dirname(__DIR__) . '/includes/header.php';
             <!-- Capability-Focused Trust Pillars (Zero Fabricated Numbers) -->
             <div class="hero-trust-strip">
                 <div class="hero-trust-item trust-card-3d">
-                    <svg class="icon-sm text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div class="trust-icon-ring trust-ring-teal">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
                     <div>
                         <strong>Security-First Engineering</strong>
                         <span>OWASP-aligned code &amp; data protection</span>
                     </div>
                 </div>
                 <div class="hero-trust-item trust-card-3d">
-                    <svg class="icon-sm text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    <div class="trust-icon-ring trust-ring-blue">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
                     <div>
                         <strong>Clean, Maintainable Code</strong>
                         <span>Modular architecture built to scale</span>
                     </div>
                 </div>
                 <div class="hero-trust-item trust-card-3d">
-                    <svg class="icon-sm text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <div class="trust-icon-ring trust-ring-gold">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
                     <div>
                         <strong>Milestone-Driven Delivery</strong>
                         <span>Transparent scope &amp; regular demos</span>
@@ -106,7 +113,7 @@ require dirname(__DIR__) . '/includes/header.php';
             </div>
         </div>
 
-        <!-- Hero Right Visual: Interactive 3D Technical Architecture & Isometric Stack Card -->
+        <!-- Hero Right Visual: Interactive 3D Glassmorphic Architecture & Isometric Vector Stage -->
         <div class="hero-visual scene-3d">
             <!-- Floating 3D Satellite Badges -->
             <div class="floating-3d-chip chip-top-right" aria-hidden="true">
@@ -136,21 +143,21 @@ require dirname(__DIR__) . '/includes/header.php';
                 <!-- Interactive 3D Extruded System Layers -->
                 <div class="arch-layers layer-3d-z3">
                     <div class="arch-layer arch-layer-3d">
-                        <div class="arch-layer-num">01</div>
+                        <div class="arch-layer-num num-neon-blue">01</div>
                         <div class="arch-layer-info">
                             <strong>Client &amp; Digital Experience Layer</strong>
                             <span>Corporate Websites &bull; Custom Web Portals &bull; Mobile Apps &bull; E-Commerce</span>
                         </div>
                     </div>
                     <div class="arch-layer arch-layer-3d">
-                        <div class="arch-layer-num">02</div>
+                        <div class="arch-layer-num num-neon-teal">02</div>
                         <div class="arch-layer-info">
                             <strong>Application, API &amp; AI Automation Layer</strong>
                             <span>Custom Software &bull; Multi-Tenant SaaS &bull; REST APIs &bull; AI Workflows</span>
                         </div>
                     </div>
                     <div class="arch-layer arch-layer-3d">
-                        <div class="arch-layer-num">03</div>
+                        <div class="arch-layer-num num-luxury-gold">03</div>
                         <div class="arch-layer-info">
                             <strong>Data, Cloud, Ads CRM &amp; Security Foundation</strong>
                             <span>MySQL / Cloud DBs &bull; Ads Lead CRM &bull; Application Hardening</span>
@@ -158,43 +165,77 @@ require dirname(__DIR__) . '/includes/header.php';
                     </div>
                 </div>
 
-                <!-- Visual 3D Isometric System Diagram -->
+                <!-- High-Definition 3D Isometric Vector & Telemetry Illustration -->
                 <div class="arch-diagram-box layer-3d-z2" aria-hidden="true">
-                    <svg viewBox="0 0 460 120" class="arch-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg viewBox="0 0 480 148" class="arch-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <linearGradient id="isoTop" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#058DF0"/>
-                                <stop offset="100%" stop-color="#033EB6"/>
+                            <linearGradient id="luxBlueGrad" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#38BDF8"/>
+                                <stop offset="55%" stop-color="#058DF0"/>
+                                <stop offset="100%" stop-color="#1D4ED8"/>
                             </linearGradient>
-                            <linearGradient id="isoCore" x1="0" y1="0" x2="1" y2="1">
-                                <stop offset="0%" stop-color="#1E293B"/>
-                                <stop offset="100%" stop-color="#0B1528"/>
+                            <linearGradient id="luxTealGrad" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#2DD4BF"/>
+                                <stop offset="100%" stop-color="#0284C7"/>
                             </linearGradient>
+                            <linearGradient id="luxGoldGrad" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#FDE68A"/>
+                                <stop offset="50%" stop-color="#F59E0B"/>
+                                <stop offset="100%" stop-color="#D97706"/>
+                            </linearGradient>
+                            <linearGradient id="luxGlassNode" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#1E293B" stop-opacity="0.95"/>
+                                <stop offset="100%" stop-color="#091124" stop-opacity="0.98"/>
+                            </linearGradient>
+                            <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="4" result="blur"/>
+                                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                            </filter>
                         </defs>
-                        <!-- Left 3D Node -->
-                        <rect x="10" y="26" width="118" height="74" rx="10" fill="#DBEAFE" opacity="0.7"/>
-                        <rect x="6" y="20" width="118" height="74" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
-                        <text x="65" y="50" text-anchor="middle" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Web &amp; Mobile</text>
-                        <text x="65" y="68" text-anchor="middle" fill="#033EB6" font-size="10" font-weight="600" font-family="Inter, sans-serif">3D Interactive UI</text>
 
-                        <path d="M124 57H166" stroke="#058DF0" stroke-width="2.2" stroke-dasharray="4 3"/>
-                        <circle cx="145" cy="57" r="4.5" fill="#033EB6"/>
+                        <!-- Subtle Isometric Perspective Grid Lines -->
+                        <path d="M12 134 H468" stroke="#1E293B" stroke-width="1"/>
+                        <path d="M12 14 H468" stroke="#1E293B" stroke-width="1"/>
 
-                        <!-- Center 3D Extruded Core Node -->
-                        <rect x="172" y="20" width="124" height="86" rx="12" fill="#033EB6" opacity="0.35"/>
-                        <rect x="166" y="12" width="124" height="86" rx="12" fill="url(#isoCore)" stroke="url(#isoTop)" stroke-width="2"/>
-                        <text x="228" y="44" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="700" font-family="Inter, sans-serif">Skyca Core Engine</text>
-                        <text x="228" y="62" text-anchor="middle" fill="#38BDF8" font-size="10" font-weight="600" font-family="Inter, sans-serif">APIs &bull; AI &bull; Security</text>
-                        <text x="228" y="80" text-anchor="middle" fill="#94A3B8" font-size="9" font-family="Inter, sans-serif">Ads CRM &amp; Workflows</text>
+                        <!-- Left 3D Isometric Node: Web & Mobile Experience -->
+                        <rect x="14" y="34" width="124" height="86" rx="14" fill="#058DF0" opacity="0.18"/>
+                        <rect x="10" y="28" width="124" height="86" rx="14" fill="url(#luxGlassNode)" stroke="url(#luxBlueGrad)" stroke-width="1.6"/>
+                        <circle cx="34" cy="48" r="10" fill="#058DF0" fill-opacity="0.2" stroke="#38BDF8" stroke-width="1.2"/>
+                        <path d="M30 48 L33 51 L39 45" stroke="#38BDF8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <text x="80" y="52" text-anchor="middle" fill="#F8FAFC" font-size="11" font-weight="700" font-family="Plus Jakarta Sans, Inter, sans-serif">Web &amp; Mobile</text>
+                        <text x="72" y="72" text-anchor="middle" fill="#38BDF8" font-size="10" font-weight="600" font-family="Inter, sans-serif">3D Interactive UI</text>
+                        <rect x="24" y="84" width="96" height="16" rx="8" fill="#0F172A" stroke="#1E3A8A" stroke-width="1"/>
+                        <text x="72" y="95" text-anchor="middle" fill="#94A3B8" font-size="8.5" font-weight="600" font-family="Inter, sans-serif">Core Web Vitals A+</text>
 
-                        <path d="M290 57H332" stroke="#058DF0" stroke-width="2.2" stroke-dasharray="4 3"/>
-                        <circle cx="311" cy="57" r="4.5" fill="#033EB6"/>
+                        <!-- Animated Data Conduit 1 -->
+                        <path d="M134 71 H176" stroke="url(#luxTealGrad)" stroke-width="2.4" stroke-dasharray="5 4" class="svg-flow-line"/>
+                        <circle cx="155" cy="71" r="4.5" fill="#2DD4BF" filter="url(#neonGlow)"/>
 
-                        <!-- Right 3D Node -->
-                        <rect x="338" y="26" width="116" height="74" rx="10" fill="#DBEAFE" opacity="0.7"/>
-                        <rect x="332" y="20" width="116" height="74" rx="10" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
-                        <text x="390" y="50" text-anchor="middle" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Cloud &amp; CRM</text>
-                        <text x="390" y="68" text-anchor="middle" fill="#033EB6" font-size="10" font-weight="600" font-family="Inter, sans-serif">MySQL &amp; Analytics</text>
+                        <!-- Center 3D Extruded Core Node: Skyca Core Engine -->
+                        <rect x="182" y="24" width="132" height="104" rx="16" fill="#058DF0" opacity="0.24"/>
+                        <rect x="176" y="16" width="132" height="104" rx="16" fill="url(#luxGlassNode)" stroke="url(#luxTealGrad)" stroke-width="2"/>
+                        <!-- Isometric 3D Cube Emblem inside Core Node -->
+                        <polygon points="242,26 258,34 242,42 226,34" fill="#38BDF8" opacity="0.9"/>
+                        <polygon points="226,34 242,42 242,56 226,48" fill="#058DF0" opacity="0.85"/>
+                        <polygon points="258,34 242,42 242,56 258,48" fill="#033EB6" opacity="0.95"/>
+                        <text x="242" y="74" text-anchor="middle" fill="#FFFFFF" font-size="11.5" font-weight="800" font-family="Plus Jakarta Sans, Inter, sans-serif">Skyca Core Engine</text>
+                        <text x="242" y="90" text-anchor="middle" fill="#2DD4BF" font-size="10" font-weight="700" font-family="Inter, sans-serif">APIs &bull; AI &bull; Security</text>
+                        <rect x="192" y="98" width="100" height="15" rx="7.5" fill="#052E16" fill-opacity="0.7" stroke="#14B8A6" stroke-width="1"/>
+                        <text x="242" y="108.5" text-anchor="middle" fill="#5EEAD4" font-size="8.5" font-weight="700" font-family="Inter, sans-serif">Zero-Trust Validated</text>
+
+                        <!-- Animated Data Conduit 2 -->
+                        <path d="M308 71 H348" stroke="url(#luxGoldGrad)" stroke-width="2.4" stroke-dasharray="5 4" class="svg-flow-line"/>
+                        <circle cx="328" cy="71" r="4.5" fill="#FBBF24" filter="url(#neonGlow)"/>
+
+                        <!-- Right 3D Isometric Node: Cloud, Data & Ads CRM -->
+                        <rect x="352" y="34" width="118" height="86" rx="14" fill="#F59E0B" opacity="0.16"/>
+                        <rect x="348" y="28" width="118" height="86" rx="14" fill="url(#luxGlassNode)" stroke="url(#luxGoldGrad)" stroke-width="1.6"/>
+                        <circle cx="370" cy="48" r="10" fill="#F59E0B" fill-opacity="0.2" stroke="#FBBF24" stroke-width="1.2"/>
+                        <path d="M366 50 L370 44 L374 50 Z" fill="#FBBF24"/>
+                        <text x="414" y="52" text-anchor="middle" fill="#F8FAFC" font-size="11" font-weight="700" font-family="Plus Jakarta Sans, Inter, sans-serif">Cloud &amp; CRM</text>
+                        <text x="407" y="72" text-anchor="middle" fill="#FBBF24" font-size="10" font-weight="600" font-family="Inter, sans-serif">MySQL &amp; Analytics</text>
+                        <rect x="360" y="84" width="94" height="16" rx="8" fill="#0F172A" stroke="#78350F" stroke-width="1"/>
+                        <text x="407" y="95" text-anchor="middle" fill="#FDE68A" font-size="8.5" font-weight="600" font-family="Inter, sans-serif">Real-Time Lead Sync</text>
                     </svg>
                 </div>
 
