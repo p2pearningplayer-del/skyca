@@ -83,6 +83,10 @@ switch ($route) {
         require __DIR__ . '/pages/services.php';
         break;
 
+    case 'portfolio':
+        require __DIR__ . '/pages/portfolio.php';
+        break;
+
     case 'about':
         require __DIR__ . '/pages/about.php';
         break;

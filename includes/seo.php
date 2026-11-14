@@ -413,6 +413,14 @@ function skyca_get_seo_audit_matrix(): array
     }
 
     $matrix[] = [
+        'path'        => '/portfolio',
+        'page_type'   => 'Solution Portfolio',
+        'title'       => 'Solution Portfolio & Engineering Blueprints | Skyca Digital Private Limited',
+        'description' => 'Explore Skyca Digital Private Limited’s enterprise software architectures, SaaS cloud blueprints, AI workflow systems, e-commerce platforms, and BI analytics solutions.',
+        'schemas'     => ['Organization', 'CollectionPage', 'BreadcrumbList'],
+        'priority'    => '0.85',
+    ];
+    $matrix[] = [
         'path'        => '/about',
         'page_type'   => 'Corporate Profile',
         'title'       => 'About Us | Skyca Digital Private Limited — IT & Software Engineering',

@@ -150,6 +150,7 @@ try {
         '/services/digital-marketing-cybersecurity' => 'Digital Marketing &amp; Cyber Security Services',
         '/services/data-analytics-support'          => 'Data Analytics &amp; Technology Support Services',
         '/services/ecommerce-solutions'             => 'E-Commerce Solutions and Related Technology Activities',
+        '/portfolio'                                => 'Production-Grade Digital Systems &amp; Reference Architectures',
         '/about'                                    => 'About Skyca Digital Private Limited',
         '/contact'                                  => 'Contact Skyca Digital Private Limited',
         '/faq'                                      => 'Frequently Asked Questions',
@@ -190,7 +191,7 @@ try {
         }
     }
 
-    assert_test('All 16 public pages have unique <title> tags', count(array_unique(array_values($seenTitles))) === count($publicRoutes));
+    assert_test('All 17 public pages have unique <title> tags', count(array_unique(array_values($seenTitles))) === count($publicRoutes));
 
     $sitemapRes = http_request('/sitemap.xml');
     assert_test('/sitemap.xml returns valid XML with all service URLs & Google Image Sitemap tags', $sitemapRes['status'] === 200 && str_contains($sitemapRes['body'], '<urlset') && str_contains($sitemapRes['body'], '<image:image>') && str_contains($sitemapRes['body'], 'https://skycadigital.com/services/software-development'));

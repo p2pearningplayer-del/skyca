@@ -59,6 +59,17 @@ foreach ($allServices as $srv) {
 }
 
 $urls[] = [
+    'loc'        => skyca_canonical_url('/portfolio'),
+    'changefreq' => 'monthly',
+    'priority'   => '0.85',
+    'images'     => [
+        [
+            'loc'   => SITE_URL . '/assets/images/og-cover.jpg',
+            'title' => 'Solution Portfolio & Engineering Blueprints — ' . COMPANY_LEGAL_NAME,
+        ],
+    ],
+];
+$urls[] = [
     'loc'        => skyca_canonical_url('/about'),
     'changefreq' => 'monthly',
     'priority'   => '0.8',

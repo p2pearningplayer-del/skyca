@@ -28,19 +28,56 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<!-- Page Hero Header -->
-<section class="page-hero bg-navy text-light">
+<!-- Page Hero Header (Luxury Midnight 3D & Vector Stage) -->
+<section class="page-hero bg-navy text-light hero-3d-stage">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
-        <div class="page-hero-content">
-            <span class="section-eyebrow eyebrow-light">Full-Spectrum IT Capabilities</span>
-            <h1 class="page-hero-title">Information Technology &amp; Software Development Services</h1>
-            <p class="page-hero-subtitle">
-                Skyca Digital Private Limited delivers practical, well-engineered technology solutions for startups, small and medium businesses, entrepreneurs, and established organizations. Explore our seven service domains below or request a tailored consultation.
-            </p>
-            <div class="hero-cta-group mt-6">
-                <a href="#services-enquiry" class="btn btn-primary btn-lg">Request a Service Consultation</a>
-                <a href="tel:<?php echo skyca_e($settings['business_phone_raw']); ?>" class="btn btn-outline-light btn-lg">Call <?php echo skyca_e($settings['business_phone']); ?></a>
+        <div class="inner-hero-split">
+            <div class="page-hero-content">
+                <span class="section-eyebrow eyebrow-light">Full-Spectrum IT Capabilities</span>
+                <h1 class="page-hero-title">Information Technology &amp; Software Development Services</h1>
+                <p class="page-hero-subtitle">
+                    Skyca Digital Private Limited delivers practical, well-engineered technology solutions for startups, small and medium businesses, entrepreneurs, and established organizations. Explore our seven service domains below or request a tailored consultation.
+                </p>
+                <div class="hero-cta-group mt-6">
+                    <a href="#services-enquiry" class="btn btn-primary btn-lg btn-3d-primary">Request a Service Consultation</a>
+                    <a href="tel:<?php echo skyca_e($settings['business_phone_raw']); ?>" class="btn btn-outline-light btn-lg">Call <?php echo skyca_e($settings['business_phone']); ?></a>
+                </div>
+            </div>
+
+            <div class="inner-hero-visual scene-3d" aria-hidden="true">
+                <div class="glass-hero-vector-card card-3d-surface">
+                    <div class="ghv-header">
+                        <span class="ghv-dot dot-teal"></span>
+                        <span class="ghv-dot dot-blue"></span>
+                        <span class="ghv-dot dot-gold"></span>
+                        <span class="ghv-title">SKYCA_7_PILLAR_MATRIX</span>
+                    </div>
+                    <svg viewBox="0 0 420 200" class="ghv-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="16" y="20" width="118" height="48" rx="10" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+                        <text x="75" y="48" text-anchor="middle" fill="#F8FAFC" font-size="10" font-weight="700" font-family="Inter, sans-serif">01. Custom Software</text>
+                        <rect x="151" y="20" width="118" height="48" rx="10" fill="#0F172A" stroke="#2DD4BF" stroke-width="1.5"/>
+                        <text x="210" y="48" text-anchor="middle" fill="#5EEAD4" font-size="10" font-weight="700" font-family="Inter, sans-serif">02. Web &amp; Mobile</text>
+                        <rect x="286" y="20" width="118" height="48" rx="10" fill="#0F172A" stroke="#FBBF24" stroke-width="1.5"/>
+                        <text x="345" y="48" text-anchor="middle" fill="#FDE68A" font-size="10" font-weight="700" font-family="Inter, sans-serif">03. SaaS &amp; Cloud</text>
+
+                        <path d="M75 68 V96 H345 V68" stroke="#38BDF8" stroke-width="1.6" stroke-dasharray="4 3" class="svg-flow-line"/>
+                        <path d="M210 68 V130" stroke="#2DD4BF" stroke-width="2" stroke-dasharray="4 3" class="svg-flow-line"/>
+
+                        <rect x="130" y="80" width="160" height="44" rx="12" fill="#09152E" stroke="#38BDF8" stroke-width="2"/>
+                        <text x="210" y="106" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="800" font-family="Plus Jakarta Sans, sans-serif">04. AI &amp; IT Consulting</text>
+
+                        <rect x="16" y="138" width="118" height="46" rx="10" fill="#0F172A" stroke="#2DD4BF" stroke-width="1.5"/>
+                        <text x="75" y="165" text-anchor="middle" fill="#E2E8F0" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">05. Growth &amp; Cyber</text>
+                        <rect x="151" y="138" width="118" height="46" rx="10" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+                        <text x="210" y="165" text-anchor="middle" fill="#E2E8F0" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">06. Data Analytics</text>
+                        <rect x="286" y="138" width="118" height="46" rx="10" fill="#0F172A" stroke="#FBBF24" stroke-width="1.5"/>
+                        <text x="345" y="165" text-anchor="middle" fill="#FDE68A" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">07. E-Commerce</text>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>

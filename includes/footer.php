@@ -127,6 +127,7 @@ $year        = date('Y');
                     <h3 class="footer-heading">Company &amp; Process</h3>
                     <ul class="footer-links">
                         <li><a href="/">Home</a></li>
+                        <li><a href="/portfolio">Portfolio &amp; Blueprints</a></li>
                         <li><a href="/about">About Skyca Digital</a></li>
                         <li><a href="/#why-skyca">Why Choose Skyca Digital</a></li>
                         <li><a href="/#process">Development &amp; Delivery Process</a></li>

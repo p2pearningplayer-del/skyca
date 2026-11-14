@@ -45,6 +45,7 @@ foreach ($allServices as $srv) {
 echo "## Key Corporate Pages\n";
 echo "- [Home](" . SITE_URL . "/)\n";
 echo "- [All Services Overview](" . SITE_URL . "/services)\n";
+echo "- [Solution Portfolio & Engineering Blueprints](" . SITE_URL . "/portfolio)\n";
 echo "- [About Skyca Digital Private Limited](" . SITE_URL . "/about)\n";
 echo "- [Contact & Project Enquiry](" . SITE_URL . "/contact)\n";
 echo "- [Frequently Asked Questions (FAQ)](" . SITE_URL . "/faq)\n";

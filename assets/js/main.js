@@ -476,14 +476,24 @@
 
         var selector = [
             '.architecture-showcase-card',
+            '.glass-hero-vector-card',
             '.service-card',
+            '.portfolio-blueprint-card',
             '.why-feature-card',
             '.process-step-card',
             '.industry-card',
             '.cap-group-card',
             '.problem-card',
             '.philosophy-card',
-            '.service-quick-summary-card'
+            '.service-quick-summary-card',
+            '.subservice-item-card',
+            '.subservice-detail-card',
+            '.service-deliverables-box',
+            '.about-service-link-card',
+            '.about-identity-card',
+            '.contact-channels-card',
+            '.thank-you-card',
+            '.not-found-card'
         ].join(', ');
 
         var cards = document.querySelectorAll(selector);

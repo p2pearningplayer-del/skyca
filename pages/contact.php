@@ -27,16 +27,45 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<!-- Page Hero -->
-<section class="page-hero bg-navy text-light">
+<!-- Page Hero (Luxury Midnight 3D & Vector Stage) -->
+<section class="page-hero bg-navy text-light hero-3d-stage">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
-        <div class="page-hero-content">
-            <span class="section-eyebrow eyebrow-light">Get in Touch</span>
-            <h1 class="page-hero-title">Contact Skyca Digital Private Limited</h1>
-            <p class="page-hero-subtitle">
-                Have a software project in mind, need a technical consultation, or want to request a quotation? Reach out to our team using the enquiry form or direct contact channels below.
-            </p>
+        <div class="inner-hero-split">
+            <div class="page-hero-content">
+                <span class="section-eyebrow eyebrow-light">Get in Touch</span>
+                <h1 class="page-hero-title">Contact Skyca Digital Private Limited</h1>
+                <p class="page-hero-subtitle">
+                    Have a software project in mind, need a technical consultation, or want to request a quotation? Reach out to our team using the enquiry form or direct contact channels below.
+                </p>
+            </div>
+
+            <div class="inner-hero-visual scene-3d" aria-hidden="true">
+                <div class="glass-hero-vector-card card-3d-surface">
+                    <div class="ghv-header">
+                        <span class="ghv-dot dot-teal"></span>
+                        <span class="ghv-dot dot-blue"></span>
+                        <span class="ghv-dot dot-gold"></span>
+                        <span class="ghv-title">DIRECT_ENGINEERING_DESK</span>
+                    </div>
+                    <svg viewBox="0 0 420 175" class="ghv-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="20" y="24" width="174" height="56" rx="12" fill="#0F172A" stroke="#38BDF8" stroke-width="1.5"/>
+                        <text x="107" y="48" text-anchor="middle" fill="#94A3B8" font-size="9" font-weight="600" font-family="Inter, sans-serif">OFFICIAL EMAIL</text>
+                        <text x="107" y="66" text-anchor="middle" fill="#FFFFFF" font-size="10.5" font-weight="700" font-family="Inter, sans-serif">info@skycadigital.com</text>
+
+                        <rect x="226" y="24" width="174" height="56" rx="12" fill="#0F172A" stroke="#2DD4BF" stroke-width="1.5"/>
+                        <text x="313" y="48" text-anchor="middle" fill="#94A3B8" font-size="9" font-weight="600" font-family="Inter, sans-serif">DIRECT CONSULTATION</text>
+                        <text x="313" y="66" text-anchor="middle" fill="#5EEAD4" font-size="10.5" font-weight="700" font-family="Inter, sans-serif">+91 6002064873</text>
+
+                        <rect x="44" y="102" width="332" height="52" rx="12" fill="#09152E" stroke="#FBBF24" stroke-width="1.5"/>
+                        <text x="210" y="124" text-anchor="middle" fill="#FDE68A" font-size="10" font-weight="700" font-family="Plus Jakarta Sans, sans-serif">Instant Reference ID &bull; Encrypted CRM Intake</text>
+                        <text x="210" y="141" text-anchor="middle" fill="#CBD5E1" font-size="9" font-family="Inter, sans-serif">Milestone-Driven Technical Proposals &amp; Architecture Review</text>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 </section>

@@ -27,16 +27,51 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<!-- Page Hero -->
-<section class="page-hero bg-navy text-light">
+<!-- Page Hero (Luxury Midnight 3D & Vector Stage) -->
+<section class="page-hero bg-navy text-light hero-3d-stage">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
-        <div class="page-hero-content">
-            <span class="section-eyebrow eyebrow-light">Corporate Profile</span>
-            <h1 class="page-hero-title">About <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></h1>
-            <p class="page-hero-subtitle">
-                An Information Technology and Software Development company dedicated to helping organizations design, build, secure, and scale practical digital systems.
-            </p>
+        <div class="inner-hero-split">
+            <div class="page-hero-content">
+                <span class="section-eyebrow eyebrow-light">Corporate Profile &amp; Governance</span>
+                <h1 class="page-hero-title">About <?php echo skyca_e(COMPANY_LEGAL_NAME); ?></h1>
+                <p class="page-hero-subtitle">
+                    An Information Technology and Software Development company dedicated to helping organizations design, build, secure, and scale practical digital systems.
+                </p>
+                <div class="hero-cta-group mt-6">
+                    <a href="/contact#enquiry-form" class="btn btn-primary btn-lg btn-3d-primary">Partner With Skyca Digital</a>
+                    <a href="/portfolio" class="btn btn-outline-light btn-lg">Explore Solution Blueprints</a>
+                </div>
+            </div>
+
+            <div class="inner-hero-visual scene-3d" aria-hidden="true">
+                <div class="glass-hero-vector-card card-3d-surface">
+                    <div class="ghv-header">
+                        <span class="ghv-dot dot-teal"></span>
+                        <span class="ghv-dot dot-blue"></span>
+                        <span class="ghv-dot dot-gold"></span>
+                        <span class="ghv-title">CIN: U62013AS2026PTC030738</span>
+                    </div>
+                    <svg viewBox="0 0 420 190" class="ghv-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="210" cy="95" r="68" stroke="#1E3A8A" stroke-width="1.5" stroke-dasharray="5 4"/>
+                        <circle cx="210" cy="95" r="46" fill="#09152E" stroke="#2DD4BF" stroke-width="2"/>
+                        <polygon points="210,66 234,80 210,94 186,80" fill="#38BDF8"/>
+                        <polygon points="186,80 210,94 210,118 186,104" fill="#058DF0"/>
+                        <polygon points="234,80 210,94 210,118 234,104" fill="#033EB6"/>
+                        <rect x="20" y="30" width="112" height="44" rx="10" fill="#0F172A" stroke="#38BDF8" stroke-width="1.4"/>
+                        <text x="76" y="56" text-anchor="middle" fill="#F8FAFC" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">Clean Architecture</text>
+                        <rect x="288" y="30" width="112" height="44" rx="10" fill="#0F172A" stroke="#FBBF24" stroke-width="1.4"/>
+                        <text x="344" y="56" text-anchor="middle" fill="#FDE68A" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">RoC Guwahati Active</text>
+                        <rect x="20" y="116" width="112" height="44" rx="10" fill="#0F172A" stroke="#2DD4BF" stroke-width="1.4"/>
+                        <text x="76" y="142" text-anchor="middle" fill="#5EEAD4" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">OWASP Security</text>
+                        <rect x="288" y="116" width="112" height="44" rx="10" fill="#0F172A" stroke="#38BDF8" stroke-width="1.4"/>
+                        <text x="344" y="142" text-anchor="middle" fill="#F8FAFC" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">7 Core IT Pillars</text>
+                    </svg>
+                </div>
+            </div>
         </div>
     </div>
 </section>

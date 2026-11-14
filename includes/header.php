@@ -125,6 +125,9 @@ $currentPath = $pageMeta['path'] ?? '/';
                         </div>
                     </li>
                     <li class="nav-item">
+                        <a href="/portfolio" class="nav-link <?php echo $currentPath === '/portfolio' ? 'active' : ''; ?>">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="/#process" class="nav-link">Our Process</a>
                     </li>
                     <li class="nav-item">
@@ -187,6 +190,7 @@ $currentPath = $pageMeta['path'] ?? '/';
                             <?php endforeach; ?>
                         </ul>
                     </li>
+                    <li><a href="/portfolio" class="mobile-nav-link <?php echo $currentPath === '/portfolio' ? 'active' : ''; ?>">Portfolio &amp; Blueprints</a></li>
                     <li><a href="/#process" class="mobile-nav-link">Development Process</a></li>
                     <li><a href="/about" class="mobile-nav-link <?php echo $currentPath === '/about' ? 'active' : ''; ?>">About Us</a></li>
                     <li><a href="/faq" class="mobile-nav-link <?php echo $currentPath === '/faq' ? 'active' : ''; ?>">FAQs</a></li>

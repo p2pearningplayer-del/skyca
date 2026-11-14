@@ -39,14 +39,18 @@ $pageMeta = [
 require dirname(__DIR__) . '/includes/header.php';
 ?>
 
-<!-- 1. SERVICE-SPECIFIC HERO SECTION -->
-<section class="page-hero service-landing-hero bg-navy text-light">
+<!-- 1. SERVICE-SPECIFIC HERO SECTION (LUXURY MIDNIGHT 3D STAGE) -->
+<section class="page-hero service-landing-hero bg-navy text-light hero-3d-stage">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-1" aria-hidden="true"></div>
+    <div class="hero-3d-orb hero-3d-orb-2" aria-hidden="true"></div>
     <div class="container">
         <?php skyca_render_breadcrumbs($breadcrumbs); ?>
 
         <div class="service-hero-grid">
             <div class="service-hero-main">
                 <div class="hero-eyebrow-pill eyebrow-pill-dark">
+                    <span class="pulse-dot" aria-hidden="true"></span>
                     <span>Service Category 0<?php echo (int) $activeService['id']; ?> &bull; <?php echo skyca_e($activeService['hero_badge']); ?></span>
                 </div>
 
@@ -55,7 +59,7 @@ require dirname(__DIR__) . '/includes/header.php';
                 <p class="page-hero-subtitle"><?php echo skyca_e($activeService['hero_subheadline']); ?></p>
 
                 <div class="hero-cta-group mt-6">
-                    <a href="#service-enquiry-section" class="btn btn-primary btn-lg">
+                    <a href="#service-enquiry-section" class="btn btn-primary btn-lg btn-3d-primary">
                         <span>Request a Quote for <?php echo skyca_e($activeService['short_title']); ?></span>
                         <svg class="icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </a>
@@ -65,10 +69,13 @@ require dirname(__DIR__) . '/includes/header.php';
                 </div>
             </div>
 
-            <div class="service-hero-card">
-                <div class="service-quick-summary-card">
-                    <div class="sq-icon" aria-hidden="true">
-                        <?php echo $activeService['icon_svg']; ?>
+            <div class="service-hero-card scene-3d">
+                <div class="service-quick-summary-card card-3d-surface">
+                    <div class="sq-top-row">
+                        <div class="sq-icon" aria-hidden="true">
+                            <?php echo $activeService['icon_svg']; ?>
+                        </div>
+                        <span class="sq-pillar-tag">Pillar 0<?php echo (int) $activeService['id']; ?> &bull; Verified</span>
                     </div>
                     <h2>Included Capabilities</h2>
                     <ul class="sq-list">
@@ -79,7 +86,7 @@ require dirname(__DIR__) . '/includes/header.php';
                             </li>
                         <?php endforeach; ?>
                     </ul>
-                    <a href="#service-enquiry-section" class="btn btn-primary btn-block mt-4">Get Started With This Service</a>
+                    <a href="#service-enquiry-section" class="btn btn-primary btn-block mt-4 btn-3d-primary">Get Started With This Service</a>
                 </div>
             </div>
         </div>
